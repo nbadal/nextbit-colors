@@ -65,7 +65,7 @@ public class GameView extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         Input.preUpdate();
-        canvas.drawColor(Color.MAGENTA);
+        canvas.drawColor(Color.BLACK);
 
         long now = System.currentTimeMillis();
 

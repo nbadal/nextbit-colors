@@ -2,7 +2,6 @@ package com.nextbit.colors.game.systems;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.Obstacle;
@@ -55,15 +54,15 @@ public class ObstacleCollisionSystem extends IteratingSystem {
 
         Obstacle obstacle = oc.obstacle;
         if(obstacle instanceof Rectangle) {
-            return checkRectangle(pc, playerTransform, (Rectangle) obstacle, obstacleTransform);
+            return checkRectangle(playerTransform, (Rectangle) obstacle, obstacleTransform);
         } else if(obstacle instanceof RingSegment) {
-            return checkRingSegment(pc, playerTransform, (RingSegment) obstacle, obstacleTransform);
+            return checkRingSegment(playerTransform, (RingSegment) obstacle, obstacleTransform);
         } else {
             throw new RuntimeException("Missing obstacle collision check for "+obstacle);
         }
     }
 
-    private boolean checkRectangle(PlayerComponent pc, TransformComponent playerTransform,
+    private boolean checkRectangle(TransformComponent playerTransform,
                                    Rectangle rectangle, TransformComponent rectTransform) {
         final Vector2 ot = rectTransform.position;
 
@@ -80,7 +79,7 @@ public class ObstacleCollisionSystem extends IteratingSystem {
         return false;
     }
 
-    private boolean checkRingSegment(PlayerComponent pc, TransformComponent playerTransform,
+    private boolean checkRingSegment(TransformComponent playerTransform,
                                      RingSegment ring, TransformComponent ringTransform) {
         float ringStart = ringTransform.rotation;
         float ringEnd = ringStart + ring.sweep;

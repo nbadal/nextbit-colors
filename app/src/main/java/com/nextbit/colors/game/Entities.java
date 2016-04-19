@@ -53,6 +53,7 @@ public enum Entities {
             case RING_SEGMENT:
                 return new ArchetypeBuilder()
                         .add(TransformComponent.class,
+                                MovementComponent.class,
                                 RenderComponent.class,
                                 ObstacleComponent.class)
                         .build(world);
@@ -74,8 +75,9 @@ public enum Entities {
         return id;
     }
 
-    public static int createRingSegment(World world, GameColor color, float x, float y,
-                                        float innerRad, float outerRad, float sweep) {
+    public static int createRingSegment(World world, GameColor color, float speed, float x, float y,
+                                        float innerRad, float outerRad, float sweep,
+                                        float startAngle) {
         int id = RING_SEGMENT.create(world);
 
         RingSegment ring = new RingSegment();
@@ -89,9 +91,22 @@ public enum Entities {
         oc.obstacle = ring;
         oc.color = color;
 
-        Vector2 position = new Vector2(x, y);
-        ComponentMapper.getFor(TransformComponent.class, world).get(id).position.set(position);
+        TransformComponent t = ComponentMapper.getFor(TransformComponent.class, world).get(id);
+        t.position.set(x, y);
+        t.rotation = startAngle;
+
+        ComponentMapper.getFor(MovementComponent.class, world).get(id).rotationSpeed = speed;
 
         return id;
+    }
+
+    public static void createRing(World world, float speed, float x, float y,
+                                  float innerRad, float outerRad) {
+        int color = ColorsGame.random.nextInt(4);
+        for(int i = 0; i < 4; i++) {
+            Entities.createRingSegment(world, GameColor.values()[color], speed, x, y, innerRad,
+                    outerRad, 90, 90 * i);
+            color = (color + 1) % 4;
+        }
     }
 }

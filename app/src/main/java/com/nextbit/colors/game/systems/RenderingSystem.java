@@ -56,6 +56,7 @@ public class RenderingSystem extends BaseEntitySystem {
 
             c.save();
             c.translate(transform.position.x, -transform.position.y);
+            c.rotate(-transform.rotation);
 
             render.sprite.render(c);
 

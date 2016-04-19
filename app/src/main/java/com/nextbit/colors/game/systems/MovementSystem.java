@@ -19,16 +19,18 @@ public class MovementSystem extends IteratingSystem {
 
     @Override
     protected void process(int entity) {
+        float delta = getWorld().getDelta();
+
         TransformComponent pos = transformM.get(entity);
         MovementComponent mov = movementM.get(entity);
 
-        tmp.set(mov.accel).scl(getWorld().getDelta());
+        tmp.set(mov.accel).scl(delta);
         mov.velocity.add(tmp);
 
-        tmp.set(mov.velocity).scl(getWorld().getDelta());
+        tmp.set(mov.velocity).scl(delta);
         pos.position.add(tmp);
         pos.position.y = Math.max(0, pos.position.y);
 
-        pos.rotation += mov.rotationSpeed;
+        pos.rotation += mov.rotationSpeed * delta;
     }
 }

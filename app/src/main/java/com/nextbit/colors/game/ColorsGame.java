@@ -14,7 +14,11 @@ import com.nextbit.colors.game.systems.RenderingSystem;
 import android.content.Context;
 import android.graphics.Canvas;
 
+import java.util.Random;
+
 public class ColorsGame {
+
+    public static final Random random = new Random(System.currentTimeMillis());
 
     private WorldConfiguration config = new WorldConfigurationBuilder()
             .with(
@@ -39,7 +43,8 @@ public class ColorsGame {
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
 
-        Entities.createRingSegment(world, GameColor.GREEN, 0, 700, 80, 100, 60);
+        Entities.createRing(world, 90, 0, 650, 200, 230);
+
     }
 
     public void setSize(int width, int height) {
