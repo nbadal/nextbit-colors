@@ -9,6 +9,8 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 
 public class CameraFollowSystem extends IteratingSystem {
 
+    private static final double SPEED = 3;
+
     private ComponentMapper<PhysicsComponent> transformM;
     private ComponentMapper<CameraFollowComponent> cameraM;
 
@@ -25,7 +27,7 @@ public class CameraFollowSystem extends IteratingSystem {
         float maxY = Camera.height / 2;
         if(distanceAboveCam > maxY) {
             double amountToMove = distanceAboveCam - maxY;
-            Camera.y += amountToMove;
+            Camera.y += amountToMove * Math.min(1.0, getWorld().getDelta() * SPEED);
         }
     }
 }
