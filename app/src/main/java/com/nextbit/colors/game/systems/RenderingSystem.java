@@ -52,6 +52,9 @@ public class RenderingSystem extends BaseEntitySystem {
         Collections.sort(renderQueue, mLayerComparator);
         for(int entity : renderQueue) {
             RenderComponent render = renderM.get(entity);
+            if(!render.enabled) {
+                continue;
+            }
             TransformComponent transform = transformM.get(entity);
 
             c.save();

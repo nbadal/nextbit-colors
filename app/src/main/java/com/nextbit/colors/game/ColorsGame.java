@@ -5,10 +5,13 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
 import com.nextbit.colors.game.systems.GravitySystem;
+import com.nextbit.colors.game.systems.LavaSystem;
 import com.nextbit.colors.game.systems.MovementSystem;
 import com.nextbit.colors.game.systems.ObstacleCollisionSystem;
+import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.systems.PlayerJumpSystem;
+import com.nextbit.colors.game.systems.PlayerRespawnSystem;
 import com.nextbit.colors.game.systems.RenderingSystem;
 
 import android.content.Context;
@@ -27,7 +30,12 @@ public class ColorsGame {
                     new MovementSystem(),
                     new PlayerFloorSystem(),
                     new CameraFollowSystem(),
+
+                    new PlayerRespawnSystem(),
+
                     new ObstacleCollisionSystem(),
+                    new LavaSystem(),
+                    new PlayerDeathSystem(),
                     new RenderingSystem()
             )
             .build();
@@ -43,7 +51,7 @@ public class ColorsGame {
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
 
-        Entities.createRing(world, 90, 0, 650, 200, 230);
+        Entities.createRing(world, 90, 0, 1300, 230, 270);
 
     }
 

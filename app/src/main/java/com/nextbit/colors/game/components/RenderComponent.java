@@ -4,5 +4,6 @@ import com.artemis.Component;
 import com.nextbit.colors.game.Sprite;
 
 public class RenderComponent extends Component {
+    public boolean enabled = true;
     public Sprite sprite;
 }

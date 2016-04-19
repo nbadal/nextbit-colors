@@ -8,13 +8,11 @@ import com.nextbit.colors.game.components.MovementComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.util.GravityMath;
 
-import android.util.Log;
-
-
 public class PlayerJumpSystem extends IteratingSystem {
 
     public static final float JUMP_VELOCITY = GravityMath.JUMP_VELOCITY;
     private ComponentMapper<MovementComponent> movementM;
+    private ComponentMapper<PlayerComponent> playerM;
 
     public PlayerJumpSystem() {
         super(Aspect.all(PlayerComponent.class, MovementComponent.class));
@@ -24,8 +22,20 @@ public class PlayerJumpSystem extends IteratingSystem {
     protected void process(int entity) {
         if(Input.justTouched()) {
             MovementComponent mov = movementM.get(entity);
+            PlayerComponent player = playerM.get(entity);
 
-            mov.velocity.y = JUMP_VELOCITY;
+            if(player.isAlive) {
+                // Jump!
+                mov.velocity.y = JUMP_VELOCITY;
+
+                if (player.jumpCount == 0) {
+                    mov.velocity.y *= 2.0f; // First jump is double
+                }
+                player.jumpCount++;
+            } else {
+                // Flag for respawn
+                player.respawn();
+            }
         }
     }
 }

@@ -18,4 +18,8 @@ public enum GameColor {
         this.color = color;
         filter = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
+
+    public static GameColor random() {
+        return values()[ColorsGame.random.nextInt(4)];
+    }
 }

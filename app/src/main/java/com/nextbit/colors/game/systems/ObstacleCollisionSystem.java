@@ -38,8 +38,9 @@ public class ObstacleCollisionSystem extends IteratingSystem {
             ObstacleComponent oc = obstacleM.get(obstacle);
             TransformComponent obstacleTransform = transformM.get(obstacle);
 
-            if(checkCollision(pc, playerTransform, oc, obstacleTransform)) {
-                // TODO: notify listener
+            boolean collided = checkCollision(pc, playerTransform, oc, obstacleTransform);
+            if(collided) {
+                pc.kill();
                 Log.d("Collision", "COLLIDED");
                 return;
             }

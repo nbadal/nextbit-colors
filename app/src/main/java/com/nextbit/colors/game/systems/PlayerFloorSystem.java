@@ -9,7 +9,7 @@ import com.nextbit.colors.game.components.TransformComponent;
 
 public class PlayerFloorSystem extends IteratingSystem {
 
-    public static final float FLOOR_POS = 100;
+    public static final float FLOOR_POS = 275;
 
     private ComponentMapper<MovementComponent> movementM;
     private ComponentMapper<TransformComponent> transformM;
