@@ -12,12 +12,12 @@ import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.obstacles.ObstacleGeometry;
 import com.nextbit.colors.game.obstacles.RingSegment;
 import com.nextbit.colors.game.obstacles.RingSegmentSprite;
+import com.nextbit.colors.game.util.EntityBody;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.Mass;
-import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.HashMap;
@@ -68,12 +68,12 @@ public enum Entities {
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = Assets.player;
         ComponentMapper.getFor(PlayerComponent.class, world).get(id).color = GameColor.BLUE;
 
-        Body playerBody = new Body();
+        Body playerBody = new EntityBody(id);
         playerBody.setBullet(true);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
-        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(45));
+        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(50));
         bf.setSensor(true);
-        Physics.world.addBody(playerBody);
+        Physics.WORLD.addBody(playerBody);
         ComponentMapper.getFor(PhysicsComponent.class, world).get(id).body = playerBody;
 
         return id;
@@ -95,17 +95,19 @@ public enum Entities {
         ring.outerRadius = outerRad;
         ring.sweep = sweep;
 
+        ComponentMapper.getFor(ObstacleComponent.class, world).get(id).color = color;
+
         RingSegmentSprite ringSprite = new RingSegmentSprite();
         ringSprite.color = color;
         ringSprite.info = ring;
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = ringSprite;
 
         PhysicsComponent phys = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
-        phys.body = ObstacleGeometry.createRingSegment(ring);
+        phys.body = ObstacleGeometry.createRingSegment(id, ring);
         phys.body.rotateAboutCenter(startAngle);
         phys.body.translate(x, y);
         phys.body.setAngularVelocity(speed);
-        Physics.world.addBody(phys.body);
+        Physics.WORLD.addBody(phys.body);
 
         return id;
     }

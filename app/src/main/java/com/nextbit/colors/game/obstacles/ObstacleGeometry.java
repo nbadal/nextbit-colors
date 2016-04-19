@@ -1,5 +1,7 @@
 package com.nextbit.colors.game.obstacles;
 
+import com.nextbit.colors.game.util.EntityBody;
+
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Polygon;
@@ -10,8 +12,8 @@ public class ObstacleGeometry {
     private static final int RING_SUBDIVS = 16;
 
     /** Create a ring made of polygonal segments */
-    public static Body createRingSegment(RingSegment info) {
-        Body body = new Body(RING_SUBDIVS);
+    public static Body createRingSegment(int entityId, RingSegment info) {
+        Body body = new EntityBody(entityId, RING_SUBDIVS);
         final float subDivAmt = info.sweep / RING_SUBDIVS;
         for(int i = 0; i < RING_SUBDIVS; i++) {
             float angle1 = i * subDivAmt;
