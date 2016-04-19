@@ -1,11 +1,8 @@
 package com.nextbit.colors.game;
 
-import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
-import com.nextbit.colors.game.components.CameraFollowComponent;
-import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
 import com.nextbit.colors.game.systems.GravitySystem;
 import com.nextbit.colors.game.systems.MovementSystem;
@@ -25,7 +22,7 @@ public class ColorsGame {
                     new PlayerJumpSystem(),
                     new MovementSystem(),
                     new PlayerFloorSystem(),
-//                    new CameraFollowSystem(),
+                    new CameraFollowSystem(),
                     new ObstacleCollisionSystem(),
                     new RenderingSystem()
             )
@@ -39,10 +36,10 @@ public class ColorsGame {
 
         Assets.load(context);
 
-        int player = Entities.PLAYER.create(world);
-        int camera = Entities.CAMERA.create(world);
+        int player = Entities.createPlayer(world);
+        Entities.createCamera(world, player);
 
-//        ComponentMapper.getFor(CameraFollowComponent.class, world).get(camera).target = player;
+        Entities.createRingSegment(world, GameColor.GREEN, 0, 700, 80, 100, 60);
     }
 
     public void setSize(int width, int height) {

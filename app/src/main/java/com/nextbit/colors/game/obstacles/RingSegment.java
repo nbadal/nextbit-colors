@@ -9,24 +9,27 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 public class RingSegment extends ColoredSprite implements Obstacle {
-    float outerRadius;
-    float innerRadius;
-    int degrees;
+    public float outerRadius;
+    public float innerRadius;
+    public float sweep;
 
     private static final RectF tempRect = new RectF();
 
-    private Paint mPaint = new Paint();
+    private Paint mPaint;
+
+    public RingSegment() {
+        mPaint = new Paint();
+        mPaint.setStyle(Paint.Style.STROKE);
+    }
 
     @Override
     public void render(Canvas canvas, GameColor color) {
-        updatePaint();
+        mPaint.setStrokeWidth(outerRadius - innerRadius);
+        mPaint.setColor(color.color);
+
         synchronized (tempRect) {
             tempRect.set(-outerRadius, -outerRadius, outerRadius, outerRadius);
-            canvas.drawArc(tempRect, 0, degrees, false, mPaint);
+            canvas.drawArc(tempRect, 0, -sweep, false, mPaint);
         }
-    }
-
-    private void updatePaint() {
-        mPaint.setStrokeWidth(outerRadius - innerRadius);
     }
 }

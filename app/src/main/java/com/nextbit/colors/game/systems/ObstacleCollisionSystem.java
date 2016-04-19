@@ -82,9 +82,42 @@ public class ObstacleCollisionSystem extends IteratingSystem {
 
     private boolean checkRingSegment(PlayerComponent pc, TransformComponent playerTransform,
                                      RingSegment ring, TransformComponent ringTransform) {
-        float playerAngleToOrigin = playerTransform.position.angle(ringTransform.position);
+        float ringStart = ringTransform.rotation;
+        float ringEnd = ringStart + ring.sweep;
 
-        float closestRingAngle = playerAngleToOrigin;
+        float angleToPlayer = tmp.set(playerTransform.position).sub(ringTransform.position).angle();
+
+        final float closestAngle;
+
+        if(angleToPlayer > ringStart && angleToPlayer < ringEnd) {
+            closestAngle = angleToPlayer;
+        } else {
+            float startDist = Math.abs(ringStart - angleToPlayer);
+            float endDist = Math.abs(ringEnd - angleToPlayer);
+            if(startDist < endDist) {
+                closestAngle = ringStart;
+            } else {
+                closestAngle = ringEnd;
+            }
+        }
+        final float closestAngleRadians = closestAngle * Vector2.DEGREES_TO_RADIANS;
+
+        float rx = ringTransform.position.x;
+        float ry = ringTransform.position.y;
+        final float xOuter = rx + ring.outerRadius * (float) Math.cos(closestAngleRadians);
+        final float yOuter = ry + ring.outerRadius * (float) Math.sin(closestAngleRadians);
+        final float xInner = rx + ring.innerRadius * (float) Math.cos(closestAngleRadians);
+        final float yInner = ry + ring.innerRadius * (float) Math.sin(closestAngleRadians);
+
+        // Check outer point
+        if(checkPoint(playerTransform, xOuter, yOuter)) {
+            return true;
+        }
+
+        // Check inner point
+        if(checkPoint(playerTransform, xInner, yInner)) {
+            return true;
+        }
 
         return false;
     }
