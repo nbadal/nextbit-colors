@@ -30,7 +30,7 @@ public class PlayerRespawnSystem extends IteratingSystem {
         RenderComponent render = renderM.get(entityId);
 
         // Reset Positions
-        transform.body.getTransform().setTranslation(0, 0);
+        transform.body.getTransform().setTranslation(0, PlayerFloorSystem.FLOOR_POS);
         Camera.y = 0;
         transform.body.setLinearVelocity(0, 0);
 

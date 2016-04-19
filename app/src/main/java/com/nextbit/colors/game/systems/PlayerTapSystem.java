@@ -10,9 +10,9 @@ import com.nextbit.colors.game.util.GravityMath;
 
 import org.dyn4j.geometry.Vector2;
 
+
 public class PlayerTapSystem extends IteratingSystem {
 
-    public static final Vector2 JUMP_VECTOR = new Vector2(0, GravityMath.JUMP_VELOCITY);
     private ComponentMapper<PhysicsComponent> physicsM;
     private ComponentMapper<PlayerComponent> playerM;
 
@@ -30,10 +30,9 @@ public class PlayerTapSystem extends IteratingSystem {
                 // Jump!
                 double factor = 1d;
                 if (player.jumpCount == 0) {
-                    factor = 2.0d; // First jump is double
+                    factor = 1.5d; // First jump is high
                 }
-                factor *= 100;
-                phys.body.setLinearVelocity(JUMP_VECTOR.copy().multiply(factor));
+                phys.body.setLinearVelocity(0, GravityMath.JUMP_VELOCITY * factor);
                 player.jumpCount++;
             } else {
                 // Flag for respawn
