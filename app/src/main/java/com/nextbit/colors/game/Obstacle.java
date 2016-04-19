@@ -1,4 +1,6 @@
 package com.nextbit.colors.game;
 
-public interface Obstacle {
+import org.dyn4j.dynamics.Body;
+
+public abstract class Obstacle extends Body {
 }

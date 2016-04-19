@@ -4,10 +4,8 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
-import com.nextbit.colors.game.systems.GravitySystem;
 import com.nextbit.colors.game.systems.LavaSystem;
-import com.nextbit.colors.game.systems.MovementSystem;
-import com.nextbit.colors.game.systems.ObstacleCollisionSystem;
+import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.systems.PlayerTapSystem;
@@ -25,15 +23,11 @@ public class ColorsGame {
 
     private WorldConfiguration config = new WorldConfigurationBuilder()
             .with(
-                    new GravitySystem(),
                     new PlayerTapSystem(),
-                    new MovementSystem(),
+                    new PhysicsSystem(),
                     new PlayerFloorSystem(),
                     new CameraFollowSystem(),
-
                     new PlayerRespawnSystem(),
-
-                    new ObstacleCollisionSystem(),
                     new LavaSystem(),
                     new PlayerDeathSystem(),
                     new RenderingSystem()
@@ -51,7 +45,7 @@ public class ColorsGame {
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
 
-        Entities.createRing(world, 90, 0, 1300, 230, 270);
+        Entities.createRing(world, Math.PI / 2, 0, 1300, 230, 270);
 
     }
 

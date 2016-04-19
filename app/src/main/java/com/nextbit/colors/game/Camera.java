@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 public class Camera {
     public static Canvas canvas;
 
-    public static float x;
-    public static float y;
+    public static double x;
+    public static double y;
 
     public static int width;
     public static int height;

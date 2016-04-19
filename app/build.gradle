@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
 
     compile 'net.onedaybeard.artemis:artemis-odb:1.4.0'
+    compile 'org.dyn4j:dyn4j:3.2.1'
 }

@@ -5,15 +5,15 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.components.PlayerComponent;
-import com.nextbit.colors.game.components.TransformComponent;
+import com.nextbit.colors.game.components.PhysicsComponent;
 
 public class LavaSystem extends IteratingSystem {
 
     private ComponentMapper<PlayerComponent> playerM;
-    private ComponentMapper<TransformComponent> transformM;
+    private ComponentMapper<PhysicsComponent> transformM;
 
     public LavaSystem() {
-        super(Aspect.all(PlayerComponent.class, TransformComponent.class));
+        super(Aspect.all(PlayerComponent.class, PhysicsComponent.class));
     }
 
     @Override
@@ -22,9 +22,9 @@ public class LavaSystem extends IteratingSystem {
         if(!pc.isAlive) {
             return;
         }
-        TransformComponent t = transformM.get(entityId);
+        PhysicsComponent t = transformM.get(entityId);
 
-        if(t.position.y < Camera.y) {
+        if(t.body.getTransform().getTranslationY() < Camera.y) {
             pc.kill();
         }
     }

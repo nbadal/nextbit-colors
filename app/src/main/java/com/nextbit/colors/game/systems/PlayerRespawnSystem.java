@@ -4,21 +4,18 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.nextbit.colors.game.Camera;
-import com.nextbit.colors.game.components.MovementComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
-import com.nextbit.colors.game.components.TransformComponent;
+import com.nextbit.colors.game.components.PhysicsComponent;
 
 public class PlayerRespawnSystem extends IteratingSystem {
 
     private ComponentMapper<PlayerComponent> playerM;
-    private ComponentMapper<TransformComponent> transformM;
-    private ComponentMapper<MovementComponent> movementM;
+    private ComponentMapper<PhysicsComponent> transformM;
     private ComponentMapper<RenderComponent> renderM;
 
     public PlayerRespawnSystem() {
-        super(Aspect.all(PlayerComponent.class, TransformComponent.class, RenderComponent.class,
-                            MovementComponent.class));
+        super(Aspect.all(PlayerComponent.class, PhysicsComponent.class, RenderComponent.class));
     }
 
     @Override
@@ -29,14 +26,13 @@ public class PlayerRespawnSystem extends IteratingSystem {
         }
         pc.respawnHandled = true;
 
-        TransformComponent transform = transformM.get(entityId);
+        PhysicsComponent transform = transformM.get(entityId);
         RenderComponent render = renderM.get(entityId);
-        MovementComponent movement = movementM.get(entityId);
 
         // Reset Positions
-        transform.position.y = 0;
+        transform.body.getTransform().setTranslation(0, 0);
         Camera.y = 0;
-        movement.velocity.set(0, 0);
+        transform.body.setLinearVelocity(0, 0);
 
         // Respawn all switches
 

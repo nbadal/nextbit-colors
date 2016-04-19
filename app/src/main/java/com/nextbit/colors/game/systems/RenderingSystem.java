@@ -4,7 +4,7 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.nextbit.colors.game.Camera;
-import com.nextbit.colors.game.components.TransformComponent;
+import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 
 import android.graphics.Canvas;
@@ -22,7 +22,7 @@ public class RenderingSystem extends BaseEntitySystem {
     }};
 
     private ComponentMapper<RenderComponent> renderM;
-    private ComponentMapper<TransformComponent> transformM;
+    private ComponentMapper<PhysicsComponent> transformM;
 
     private final Comparator<Integer> mLayerComparator = new Comparator<Integer>() {
         @Override
@@ -35,7 +35,7 @@ public class RenderingSystem extends BaseEntitySystem {
     private ArrayList<Integer> renderQueue = new ArrayList<>();
 
     public RenderingSystem() {
-        super(Aspect.all(TransformComponent.class, RenderComponent.class));
+        super(Aspect.all(PhysicsComponent.class, RenderComponent.class));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RenderingSystem extends BaseEntitySystem {
         c.save();
         // Offset for camera, Y at bottom of screen
         c.translate(0, Camera.height);
-        c.translate(-Camera.x, Camera.y);
+        c.translate(-(float)Camera.x, (float)Camera.y);
 
         Collections.sort(renderQueue, mLayerComparator);
         for(int entity : renderQueue) {
@@ -55,11 +55,12 @@ public class RenderingSystem extends BaseEntitySystem {
             if(!render.enabled) {
                 continue;
             }
-            TransformComponent transform = transformM.get(entity);
+            PhysicsComponent transform = transformM.get(entity);
 
             c.save();
-            c.translate(transform.position.x, -transform.position.y);
-            c.rotate(-transform.rotation);
+            c.translate((float) transform.body.getTransform().getTranslationX(),
+                    (float) -transform.body.getTransform().getTranslationY());
+            c.rotate((float) -Math.toDegrees(transform.body.getTransform().getRotation()));
 
             render.sprite.render(c);
 
