@@ -8,13 +8,13 @@ import com.nextbit.colors.game.components.MovementComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.util.GravityMath;
 
-public class PlayerJumpSystem extends IteratingSystem {
+public class PlayerTapSystem extends IteratingSystem {
 
     public static final float JUMP_VELOCITY = GravityMath.JUMP_VELOCITY;
     private ComponentMapper<MovementComponent> movementM;
     private ComponentMapper<PlayerComponent> playerM;
 
-    public PlayerJumpSystem() {
+    public PlayerTapSystem() {
         super(Aspect.all(PlayerComponent.class, MovementComponent.class));
     }
 

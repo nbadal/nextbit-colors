@@ -10,7 +10,7 @@ import com.nextbit.colors.game.systems.MovementSystem;
 import com.nextbit.colors.game.systems.ObstacleCollisionSystem;
 import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
-import com.nextbit.colors.game.systems.PlayerJumpSystem;
+import com.nextbit.colors.game.systems.PlayerTapSystem;
 import com.nextbit.colors.game.systems.PlayerRespawnSystem;
 import com.nextbit.colors.game.systems.RenderingSystem;
 
@@ -26,7 +26,7 @@ public class ColorsGame {
     private WorldConfiguration config = new WorldConfigurationBuilder()
             .with(
                     new GravitySystem(),
-                    new PlayerJumpSystem(),
+                    new PlayerTapSystem(),
                     new MovementSystem(),
                     new PlayerFloorSystem(),
                     new CameraFollowSystem(),
