@@ -1,9 +1,8 @@
 package com.nextbit.colors.game.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.artemis.Aspect;
+import com.artemis.ComponentMapper;
+import com.artemis.systems.IteratingSystem;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.components.CameraFollowComponent;
 import com.nextbit.colors.game.components.TransformComponent;
@@ -14,14 +13,11 @@ public class CameraFollowSystem extends IteratingSystem {
     private ComponentMapper<CameraFollowComponent> cameraM;
 
     public CameraFollowSystem() {
-        super(Family.all(CameraFollowComponent.class).get());
-
-        transformM = ComponentMapper.getFor(TransformComponent.class);
-        cameraM = ComponentMapper.getFor(CameraFollowComponent.class);
+        super(Aspect.all(CameraFollowComponent.class));
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
+    protected void process(int entity) {
         CameraFollowComponent cfc = cameraM.get(entity);
         TransformComponent target = transformM.get(cfc.target);
 

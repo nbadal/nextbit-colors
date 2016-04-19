@@ -1,45 +1,45 @@
 package com.nextbit.colors.game.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.utils.Array;
+import com.artemis.Aspect;
+import com.artemis.BaseEntitySystem;
+import com.artemis.ComponentMapper;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.components.TransformComponent;
 import com.nextbit.colors.game.components.RenderComponent;
-import com.nextbit.colors.game.util.LayerComparator;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class RenderingSystem extends IteratingSystem {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+public class RenderingSystem extends BaseEntitySystem {
     public static final Paint DEBUG_PAINT = new Paint() {{
         setColor(Color.RED);
         setTextSize(100);
     }};
 
-    private static final LayerComparator LAYER_COMPARATOR = new LayerComparator();
+    private ComponentMapper<RenderComponent> renderM;
+    private ComponentMapper<TransformComponent> transformM;
 
-    private final ComponentMapper<RenderComponent> renderM = ComponentMapper.getFor(RenderComponent.class);
-    private final ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
+    private final Comparator<Integer> mLayerComparator = new Comparator<Integer>() {
+        @Override
+        public int compare(Integer lhs, Integer rhs) {
+            return 0;
+//            return Integer.compare(renderM.get(lhs).layer, renderM.get(rhs).layer);
+        }
+    };
 
-    private Array<Entity> renderQueue = new Array<>();
+    private ArrayList<Integer> renderQueue = new ArrayList<>();
 
     public RenderingSystem() {
-        super(Family.all(TransformComponent.class, RenderComponent.class).get());
+        super(Aspect.all(TransformComponent.class, RenderComponent.class));
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
-        renderQueue.add(entity);
-    }
-
-    @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-
+    protected void processSystem() {
         Canvas c = Camera.canvas;
         if(c == null) {
             return;
@@ -49,9 +49,8 @@ public class RenderingSystem extends IteratingSystem {
         c.translate(0, Camera.height);
         c.translate(-Camera.x, Camera.y);
 
-
-        renderQueue.sort(LAYER_COMPARATOR);
-        for(Entity entity : renderQueue) {
+        Collections.sort(renderQueue, mLayerComparator);
+        for(int entity : renderQueue) {
             RenderComponent render = renderM.get(entity);
             TransformComponent transform = transformM.get(entity);
 
@@ -64,7 +63,19 @@ public class RenderingSystem extends IteratingSystem {
 
         }
         c.restore();
+    }
 
-        renderQueue.clear();
+    @Override
+    protected void inserted(int entityId) {
+        super.inserted(entityId);
+
+        renderQueue.add(entityId);
+    }
+
+    @Override
+    protected void removed(int entityId) {
+        super.removed(entityId);
+
+        renderQueue.remove(entityId);
     }
 }

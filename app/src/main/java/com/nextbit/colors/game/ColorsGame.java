@@ -1,6 +1,12 @@
 package com.nextbit.colors.game;
 
-import com.badlogic.ashley.core.PooledEngine;
+import com.artemis.ComponentMapper;
+import com.artemis.World;
+import com.artemis.WorldConfiguration;
+import com.artemis.WorldConfigurationBuilder;
+import com.nextbit.colors.game.components.CameraFollowComponent;
+import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.systems.CameraFollowSystem;
 import com.nextbit.colors.game.systems.GravitySystem;
 import com.nextbit.colors.game.systems.MovementSystem;
 import com.nextbit.colors.game.systems.ObstacleCollisionSystem;
@@ -13,8 +19,18 @@ import android.graphics.Canvas;
 
 public class ColorsGame {
 
-    private final PooledEngine engine = new PooledEngine();
-    private final World world = new World(engine);
+    private WorldConfiguration config = new WorldConfigurationBuilder()
+            .with(
+                    new GravitySystem(),
+                    new PlayerJumpSystem(),
+                    new MovementSystem(),
+                    new PlayerFloorSystem(),
+//                    new CameraFollowSystem(),
+                    new ObstacleCollisionSystem(),
+                    new RenderingSystem()
+            )
+            .build();
+    private final World world = new World(config);
 
     private Context mContext;
 
@@ -23,15 +39,10 @@ public class ColorsGame {
 
         Assets.load(context);
 
-        engine.addSystem(new GravitySystem());
-        engine.addSystem(new PlayerJumpSystem());
-        engine.addSystem(new MovementSystem());
-        engine.addSystem(new PlayerFloorSystem());
-//        engine.addSystem(new CameraFollowSystem());
-        engine.addSystem(new ObstacleCollisionSystem());
-        engine.addSystem(new RenderingSystem());
+        int player = Entities.PLAYER.create(world);
+        int camera = Entities.CAMERA.create(world);
 
-        world.create();
+//        ComponentMapper.getFor(CameraFollowComponent.class, world).get(camera).target = player;
     }
 
     public void setSize(int width, int height) {
@@ -48,7 +59,8 @@ public class ColorsGame {
 
         Camera.canvas = canvas;
 
-        engine.update(deltaMillis / 1000f);
+        world.setDelta(deltaMillis / 1000f);
+        world.process();
     }
 
     //
