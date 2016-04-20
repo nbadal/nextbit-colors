@@ -13,7 +13,7 @@ public class Assets {
 
     public static void load(Context context) {
         final Resources res = context.getResources();
-        sheep = new DrawableSprite(res.getDrawable(R.drawable.sheep), 0.6, 0.45);
+        sheep = new DrawableSprite(res.getDrawable(R.drawable.sheep), 0.35, 0.45);
 
         metersToPx = sheep.getHeightPx();
         pxToMeters = 1.0 / metersToPx;
