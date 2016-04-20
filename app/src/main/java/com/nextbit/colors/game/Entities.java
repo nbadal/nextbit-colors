@@ -93,7 +93,7 @@ public enum Entities {
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PLAYER,
                 PhysicsSystem.CAT_OBSTACLE | PhysicsSystem.CAT_SWITCH));
-        world.getSystem(PhysicsSystem.class).WORLD.addBody(playerBody);
+        world.getSystem(PhysicsSystem.class).addBody(playerBody);
         ComponentMapper.getFor(PhysicsComponent.class, world).get(id).body = playerBody;
 
         return id;
@@ -126,7 +126,7 @@ public enum Entities {
         phys.body.rotateAboutCenter(startAngle);
         phys.body.translate(x, y);
         phys.body.setAngularVelocity(speed);
-        world.getSystem(PhysicsSystem.class).WORLD.addBody(phys.body);
+        world.getSystem(PhysicsSystem.class).addBody(phys.body);
 
         return id;
     }
@@ -152,7 +152,7 @@ public enum Entities {
         BodyFixture bf = pc.body.addFixture(Geometry.createCircle(SwitchComponent.RADIUS));
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_SWITCH, PhysicsSystem.CAT_PLAYER));
-        world.getSystem(PhysicsSystem.class).WORLD.addBody(pc.body);
+        world.getSystem(PhysicsSystem.class).addBody(pc.body);
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new SwitchSprite();
         return id;
     }

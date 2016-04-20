@@ -13,6 +13,7 @@ import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.util.EntityBody;
 import com.nextbit.colors.game.util.GravityMath;
 
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.ContinuousDetectionMode;
 import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
@@ -29,8 +30,8 @@ public class PhysicsSystem extends BaseEntitySystem {
     public static final long CAT_OBSTACLE = 1 << 1;
     public static final long CAT_SWITCH = 1 << 2;
 
-    public final World WORLD = new World();
-    public final HashSet<Pair<Integer, Integer>> COLLISIONS = new HashSet<>();
+    private final World mWorld = new World();
+    public final HashSet<Pair<Integer, Integer>> mCollisions = new HashSet<>();
 
     private ComponentMapper<PlayerComponent> playerM;
     private ComponentMapper<ObstacleComponent> obstacleM;
@@ -42,14 +43,14 @@ public class PhysicsSystem extends BaseEntitySystem {
     public PhysicsSystem() {
         super(Aspect.all(PhysicsComponent.class));
 
-        WORLD.setGravity(new Vector2(0, GravityMath.GRAVITY));
+        mWorld.setGravity(new Vector2(0, GravityMath.GRAVITY));
         Settings settings = new Settings();
         settings.setContinuousDetectionMode(ContinuousDetectionMode.BULLETS_ONLY);
-        WORLD.setSettings(settings);
-        WORLD.addListener(new ContactAdapter() {
+        mWorld.setSettings(settings);
+        mWorld.addListener(new ContactAdapter() {
             @Override
             public void sensed(ContactPoint point) {
-                COLLISIONS.add(new Pair<>(
+                mCollisions.add(new Pair<>(
                         ((EntityBody)point.getBody1()).entityId,
                         ((EntityBody)point.getBody2()).entityId
                 ));
@@ -58,17 +59,20 @@ public class PhysicsSystem extends BaseEntitySystem {
     }
 
     // bodies must be added outside of this system because we usually set the body after creation
+    public void addBody(Body body) {
+        mWorld.addBody(body);
+    }
 
     @Override
     protected void removed(int entityId) {
         super.removed(entityId);
-        WORLD.removeBody(physicsM.get(entityId).body);
+        mWorld.removeBody(physicsM.get(entityId).body);
     }
 
     @Override
     protected void processSystem() {
-        WORLD.update(getWorld().getDelta());
-        for(Pair<Integer, Integer> collision : COLLISIONS) {
+        mWorld.update(getWorld().getDelta());
+        for(Pair<Integer, Integer> collision : mCollisions) {
             final int player, collided;
             if(playerM.has(collision.first)) {
                 player = collision.first;
@@ -101,6 +105,6 @@ public class PhysicsSystem extends BaseEntitySystem {
                 }
             }
         }
-        COLLISIONS.clear();
+        mCollisions.clear();
     }
 }
