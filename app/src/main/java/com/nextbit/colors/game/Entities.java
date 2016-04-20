@@ -12,6 +12,7 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.components.ScoreComponent;
+import com.nextbit.colors.game.components.StartComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.components.UIComponent;
 import com.nextbit.colors.game.graphics.Assets;
@@ -73,6 +74,7 @@ public enum Entities {
             case START_TEXT:
                 return new ArchetypeBuilder()
                         .add(UIComponent.class,
+                                StartComponent.class,
                                 RenderComponent.class)
                         .build(world);
             case SCORE:
@@ -129,7 +131,7 @@ public enum Entities {
         return id;
     }
 
-    public static int createGameOver(World world, float y) {
+    public static int createGameOver(World world, double y) {
         int id = GAME_OVER.create(world);
         UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
         ui.isWorldPosition = true;

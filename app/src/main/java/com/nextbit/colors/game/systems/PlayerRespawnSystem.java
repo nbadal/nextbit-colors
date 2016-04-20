@@ -6,8 +6,10 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.Camera;
+import com.nextbit.colors.game.Entities;
 import com.nextbit.colors.game.GameColor;
 import com.nextbit.colors.game.components.ColorComponent;
+import com.nextbit.colors.game.components.GameOverComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
@@ -59,7 +61,15 @@ public class PlayerRespawnSystem extends IteratingSystem {
 
         // Remove Death Particles
 
+        // Show Start
+        Entities.createStartText(getWorld());
+
         // Hide Game Over
+        IntBag gameOvers = getWorld().getAspectSubscriptionManager().get(
+                Aspect.all(GameOverComponent.class)).getEntities();
+        for(int i = 0; i < gameOvers.size(); i++) {
+            getWorld().delete(gameOvers.get(i));
+        }
 
         // Show Player
         render.enabled = true;

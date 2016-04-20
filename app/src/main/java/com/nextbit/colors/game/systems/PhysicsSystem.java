@@ -31,7 +31,7 @@ public class PhysicsSystem extends BaseEntitySystem {
     public static final long CAT_SWITCH = 1 << 2;
 
     private final World mWorld = new World();
-    public final HashSet<Pair<Integer, Integer>> mCollisions = new HashSet<>();
+    public final HashSet<Pair<Integer, Integer>> COLLISIONS = new HashSet<>();
 
     private ComponentMapper<PlayerComponent> playerM;
     private ComponentMapper<ObstacleComponent> obstacleM;
@@ -50,7 +50,7 @@ public class PhysicsSystem extends BaseEntitySystem {
         mWorld.addListener(new ContactAdapter() {
             @Override
             public void sensed(ContactPoint point) {
-                mCollisions.add(new Pair<>(
+                COLLISIONS.add(new Pair<>(
                         ((EntityBody)point.getBody1()).entityId,
                         ((EntityBody)point.getBody2()).entityId
                 ));
@@ -72,7 +72,7 @@ public class PhysicsSystem extends BaseEntitySystem {
     @Override
     protected void processSystem() {
         mWorld.update(getWorld().getDelta());
-        for(Pair<Integer, Integer> collision : mCollisions) {
+        for(Pair<Integer, Integer> collision : COLLISIONS) {
             final int player, collided;
             if(playerM.has(collision.first)) {
                 player = collision.first;
@@ -105,6 +105,6 @@ public class PhysicsSystem extends BaseEntitySystem {
                 }
             }
         }
-        mCollisions.clear();
+        COLLISIONS.clear();
     }
 }

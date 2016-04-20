@@ -3,10 +3,13 @@ package com.nextbit.colors.game.systems;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
+import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.ColorsGame;
 import com.nextbit.colors.game.Input;
+import com.nextbit.colors.game.components.GameOverComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
+import com.nextbit.colors.game.components.StartComponent;
 import com.nextbit.colors.game.util.GravityMath;
 
 import org.dyn4j.geometry.Vector2;
@@ -32,6 +35,13 @@ public class PlayerTapSystem extends IteratingSystem {
                 double factor = 1d;
                 if (player.jumpCount == 0) {
                     factor = 1.5d; // First jump is high
+
+                    // Hide start
+                    IntBag starts = getWorld().getAspectSubscriptionManager().get(
+                            Aspect.all(StartComponent.class)).getEntities();
+                    for(int i = 0; i < starts.size(); i++) {
+                        getWorld().delete(starts.get(i));
+                    }
                 }
                 phys.body.setLinearVelocity(0, GravityMath.JUMP_VELOCITY * factor);
                 player.jumpTime = System.currentTimeMillis();

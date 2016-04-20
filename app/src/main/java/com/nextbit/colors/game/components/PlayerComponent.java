@@ -16,20 +16,29 @@ public class PlayerComponent extends Component {
     public boolean isAlive = true;
     public boolean deathHandled;
     public boolean respawnHandled;
+    private long deathTime;
 
     public void kill() {
+        if(!isAlive) return;
+
         isAlive = false;
+        deathTime = System.currentTimeMillis();
 
         deathHandled = false;
         respawnHandled = false;
     }
 
     public void respawn() {
+        if(!canRespawn()) return;
+        if(isAlive) return;
+
         isAlive = true;
 
         respawnHandled = false;
-
-
         jumpCount = 0;
+    }
+
+    public boolean canRespawn() {
+        return System.currentTimeMillis() - deathTime > 1000;
     }
 }
