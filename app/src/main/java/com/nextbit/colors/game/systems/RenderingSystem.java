@@ -8,6 +8,7 @@ import com.nextbit.colors.game.GameColor;
 import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.components.UIComponent;
 import com.nextbit.colors.game.graphics.Assets;
 
 import android.graphics.Canvas;
@@ -26,6 +27,7 @@ public class RenderingSystem extends BaseEntitySystem {
 
     private ComponentMapper<RenderComponent> renderM;
     private ComponentMapper<PhysicsComponent> transformM;
+    private ComponentMapper<UIComponent> uiM;
     private ComponentMapper<ColorComponent> colorM;
 
     private final Comparator<Integer> mLayerComparator = new Comparator<Integer>() {
@@ -39,7 +41,7 @@ public class RenderingSystem extends BaseEntitySystem {
     private ArrayList<Integer> renderQueue = new ArrayList<>();
 
     public RenderingSystem() {
-        super(Aspect.all(PhysicsComponent.class, RenderComponent.class));
+        super(Aspect.all(RenderComponent.class).one(PhysicsComponent.class, UIComponent.class));
     }
 
     @Override
@@ -59,16 +61,28 @@ public class RenderingSystem extends BaseEntitySystem {
             if(render == null || !render.enabled || !render.onScreen) {
                 continue;
             }
-            PhysicsComponent transform = transformM.get(entity);
+
             GameColor color = null;
             if(colorM.has(entity)) {
                 color = colorM.get(entity).color;
             }
 
+            final double worldX, worldY, rotation;
+            if(transformM.has(entity)) {
+                PhysicsComponent transform = transformM.get(entity);
+                worldX = transform.body.getTransform().getTranslationX();
+                worldY = transform.body.getTransform().getTranslationY();
+                rotation = transform.body.getTransform().getRotation();
+            } else {
+                UIComponent ui = uiM.get(entity);
+                worldX = ui.isWorldPosition ? ui.position.x : ui.position.x + Camera.x;
+                worldY = ui.isWorldPosition ? ui.position.y : ui.position.y + Camera.y;
+                rotation = 0;
+            }
+
             c.save();
-            c.translate((float) transform.body.getTransform().getTranslationX() * Assets.metersToPx,
-                    (float) -transform.body.getTransform().getTranslationY() * Assets.metersToPx);
-            c.rotate((float) -Math.toDegrees(transform.body.getTransform().getRotation()));
+            c.translate((float) worldX * Assets.metersToPx, (float) -worldY * Assets.metersToPx);
+            c.rotate((float) -Math.toDegrees(rotation));
 
             render.sprite.render(c, color);
 

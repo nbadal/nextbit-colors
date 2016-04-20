@@ -51,6 +51,8 @@ public class ColorsGame {
 
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
+        Entities.createStartText(world);
+        Entities.createScore(world);
     }
 
     public void setSize(int widthPx, int heightPx) {

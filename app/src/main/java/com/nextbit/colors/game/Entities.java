@@ -6,17 +6,22 @@ import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.nextbit.colors.game.components.CameraFollowComponent;
 import com.nextbit.colors.game.components.ColorComponent;
+import com.nextbit.colors.game.components.GameOverComponent;
 import com.nextbit.colors.game.components.ObstacleComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.components.ScoreComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
+import com.nextbit.colors.game.components.UIComponent;
 import com.nextbit.colors.game.graphics.Assets;
 import com.nextbit.colors.game.graphics.SwitchSprite;
+import com.nextbit.colors.game.graphics.TextSprite;
 import com.nextbit.colors.game.obstacles.ObstacleGeometry;
 import com.nextbit.colors.game.obstacles.RingSegment;
 import com.nextbit.colors.game.graphics.RingSegmentSprite;
 import com.nextbit.colors.game.systems.PhysicsSystem;
+import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.util.EntityBody;
 
 import org.dyn4j.collision.CategoryFilter;
@@ -33,6 +38,9 @@ import java.util.Set;
 public enum Entities {
     CAMERA,
     PLAYER,
+    START_TEXT,
+    SCORE,
+    GAME_OVER,
     RING_SEGMENT,
     COLOR_SWITCH,
     ;
@@ -62,6 +70,23 @@ public enum Entities {
                 return new ArchetypeBuilder()
                         .add(CameraFollowComponent.class)
                         .build(world);
+            case START_TEXT:
+                return new ArchetypeBuilder()
+                        .add(UIComponent.class,
+                                RenderComponent.class)
+                        .build(world);
+            case SCORE:
+                return new ArchetypeBuilder()
+                        .add(ScoreComponent.class,
+                                UIComponent.class,
+                                RenderComponent.class)
+                        .build(world);
+            case GAME_OVER:
+                return new ArchetypeBuilder()
+                        .add(GameOverComponent.class,
+                                UIComponent.class,
+                                RenderComponent.class)
+                        .build(world);
             case RING_SEGMENT:
                 return new ArchetypeBuilder()
                         .add(PhysicsComponent.class,
@@ -87,7 +112,6 @@ public enum Entities {
         ComponentMapper.getFor(ColorComponent.class, world).get(id).color = GameColor.random();
 
         Body playerBody = new EntityBody(id);
-//        playerBody.setBullet(true);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
         BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE * 0.75));
         bf.setSensor(true);
@@ -102,6 +126,38 @@ public enum Entities {
     public static int createCamera(World world, int targetId) {
         int id = CAMERA.create(world);
         ComponentMapper.getFor(CameraFollowComponent.class, world).get(id).target = targetId;
+        return id;
+    }
+
+    public static int createGameOver(World world, float y) {
+        int id = GAME_OVER.create(world);
+        UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
+        ui.isWorldPosition = true;
+        ui.position.y = y;
+
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite
+                ("GAME OVER");
+        return id;
+    }
+
+    public static int createScore(World world) {
+        int id = SCORE.create(world);
+        UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
+        ui.isWorldPosition = false;
+        ui.position.x = 1;
+        ui.position.y = PlayerFloorSystem.FLOOR_POS / 2;
+
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite("00");
+        return id;
+    }
+
+    public static int createStartText(World world) {
+        int id = START_TEXT.create(world);
+        UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
+        ui.isWorldPosition = true;
+        ui.position.y = PlayerFloorSystem.FLOOR_POS / 2;
+
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite("START");
         return id;
     }
 

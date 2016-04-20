@@ -4,10 +4,16 @@ import com.nextbit.colors.R;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 
 public class Assets {
+    public static final int TEXT_COLOR = 0xff838383;
+    public static final int TEXT_SIZE_PX = 68;
+
     public static double pxToMeters;
     public static float metersToPx;
+    public static Paint textPaint;
 
     public static DrawableSprite sheep;
 
@@ -17,5 +23,11 @@ public class Assets {
 
         metersToPx = sheep.getHeightPx();
         pxToMeters = 1.0 / metersToPx;
+
+        textPaint = new Paint();
+        textPaint.setColor(TEXT_COLOR);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextSize(TEXT_SIZE_PX);
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
     }
 }
