@@ -6,9 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class GameActivity extends AppCompatActivity {
+    private GameView mGameView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        mGameView = (GameView) findViewById(R.id.game);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mGameView.onPause();
     }
 }

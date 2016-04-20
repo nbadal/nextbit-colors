@@ -40,13 +40,11 @@ public class ColorsGame {
     public ColorsGame(Context context) {
         mContext = context;
 
-        Assets.load(context);
-
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
 
         Entities.createRing(world, Math.PI / 2, 0, 1300, 230, 270);
-
+        Entities.createSwitch(world, 1300);
     }
 
     public void setSize(int width, int height) {

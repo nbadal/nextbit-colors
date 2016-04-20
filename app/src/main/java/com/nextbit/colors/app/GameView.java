@@ -15,9 +15,8 @@ import android.view.View;
 public class GameView extends SurfaceView {
     private final SurfaceHolder holder;
     private final GameLoopThread gameLoopThread;
-    private final ColorsGame game;
+    private boolean mRunning;
 
-    private long mLastUpdate;
 
     public GameView(Context context) {
         this(context, null);
@@ -31,54 +30,34 @@ public class GameView extends SurfaceView {
         super(context, attrs, defStyleAttr);
 
         gameLoopThread = new GameLoopThread(this);
-        game = new ColorsGame(context);
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                boolean retry = true;
-                gameLoopThread.setRunning(false);
-                while(retry) {
-                    try {
-                        gameLoopThread.join();
-                        retry = false;
-                    } catch (InterruptedException e) {
-                    }
+                if(!mRunning) {
+                    gameLoopThread.start();
+                    mRunning = true;
+                } else {
+                    gameLoopThread.onResume();
                 }
             }
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                gameLoopThread.setRunning(true);
-                if(!gameLoopThread.isAlive()) {
-                    gameLoopThread.start();
-                }
             }
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-                gameLoopThread.setRunning(false);
             }
         });
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        Input.preUpdate();
-        canvas.drawColor(Color.BLACK);
-
-        long now = System.currentTimeMillis();
-
-        game.update(canvas, now - mLastUpdate);
-        mLastUpdate = now;
-        Input.postUpdate();
-    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        game.setSize(w, h);
+        gameLoopThread.setSize(w, h);
     }
 
     @Override
@@ -86,5 +65,9 @@ public class GameView extends SurfaceView {
         final int act = event.getAction();
         Input.setTouched(act == MotionEvent.ACTION_DOWN || act == MotionEvent.ACTION_MOVE);
         return true;
+    }
+
+    public void onPause() {
+        gameLoopThread.onPause();
     }
 }

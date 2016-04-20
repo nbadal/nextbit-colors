@@ -1,7 +1,5 @@
 package com.nextbit.colors.game;
 
-import com.nextbit.colors.game.systems.RenderingSystem;
-
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
@@ -24,7 +22,7 @@ public class DrawableSprite extends Sprite {
     }
 
     @Override
-    public void render(Canvas canvas) {
+    public void render(Canvas canvas, GameColor color) {
         canvas.save();
 //        canvas.translate(0, mDrawable.getBounds().top);
         mDrawable.draw(canvas);

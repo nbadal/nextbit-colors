@@ -3,42 +3,90 @@ package com.nextbit.colors.game.systems;
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
-import com.nextbit.colors.game.Physics;
+import com.nextbit.colors.game.GameColor;
+import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.ObstacleComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
+import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.components.SwitchComponent;
+import com.nextbit.colors.game.util.EntityBody;
+import com.nextbit.colors.game.util.GravityMath;
+
+import org.dyn4j.dynamics.Settings;
+import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.contact.ContactAdapter;
+import org.dyn4j.dynamics.contact.ContactPoint;
+import org.dyn4j.geometry.Vector2;
 
 import android.util.Pair;
 
+import java.util.HashSet;
+
 public class PhysicsSystem extends BaseEntitySystem {
+    public final World WORLD = new World();
+    public final HashSet<Pair<Integer, Integer>> COLLISIONS = new HashSet<>();
 
     private ComponentMapper<PlayerComponent> playerM;
     private ComponentMapper<ObstacleComponent> obstacleM;
+    private ComponentMapper<SwitchComponent> switchM;
+    private ComponentMapper<RenderComponent> renderM;
+    private ComponentMapper<ColorComponent> colorM;
 
     public PhysicsSystem() {
         super(Aspect.all(PhysicsComponent.class));
+
+        WORLD.setGravity(new Vector2(0, GravityMath.GRAVITY));
+        Settings settings = new Settings();
+        settings.setMaximumTranslation(50);
+        WORLD.setSettings(settings);
+        WORLD.addListener(new ContactAdapter() {
+            @Override
+            public void sensed(ContactPoint point) {
+                COLLISIONS.add(new Pair<>(
+                        ((EntityBody)point.getBody1()).entityId,
+                        ((EntityBody)point.getBody2()).entityId
+                ));
+            }
+        });
     }
 
     @Override
     protected void processSystem() {
-        Physics.WORLD.update(getWorld().getDelta());
-        for(Pair<Integer, Integer> collision : Physics.COLLISIONS) {
-            final int player, obstacle;
+        WORLD.update(getWorld().getDelta());
+        for(Pair<Integer, Integer> collision : COLLISIONS) {
+            final int player, collided;
             if(playerM.has(collision.first)) {
                 player = collision.first;
-                obstacle = collision.second;
+                collided = collision.second;
             } else {
                 player = collision.second;
-                obstacle = collision.first;
+                collided = collision.first;
             }
 
             PlayerComponent pc = playerM.get(player);
-            ObstacleComponent oc = obstacleM.get(obstacle);
+            ColorComponent playerCc = colorM.get(player);
 
-            if(pc.color != oc.color) {
-                pc.kill();
+            // Obstacle Collisions
+            if(obstacleM.has(collided)) {
+                ObstacleComponent oc = obstacleM.get(collided);
+                ColorComponent obstacleCC = colorM.get(collided);
+
+                if(playerCc.color != obstacleCC.color) {
+                    pc.kill();
+                }
+            }
+
+            // Color Switches
+            if(switchM.has(collided)) {
+                RenderComponent rc = renderM.get(collided);
+                if(rc.enabled) {
+                    rc.enabled = false;
+
+                    playerCc.color = GameColor.random(playerCc.color);
+                }
             }
         }
-        Physics.COLLISIONS.clear();
+        COLLISIONS.clear();
     }
 }

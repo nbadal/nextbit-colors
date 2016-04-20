@@ -22,4 +22,9 @@ public enum GameColor {
     public static GameColor random() {
         return values()[ColorsGame.random.nextInt(4)];
     }
+
+    public static GameColor random(GameColor except) {
+        final int newColorIdx = (except.ordinal() + 1 + ColorsGame.random.nextInt(3)) % 4;
+        return GameColor.values()[newColorIdx];
+    }
 }

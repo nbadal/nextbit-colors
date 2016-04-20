@@ -1,13 +1,14 @@
 package com.nextbit.colors.game.obstacles;
 
-import com.nextbit.colors.game.ColoredSprite;
 import com.nextbit.colors.game.GameColor;
+import com.nextbit.colors.game.Sprite;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-public class RingSegmentSprite extends ColoredSprite {
+public class RingSegmentSprite extends Sprite {
+    private static final float SAFETY = 5;
     public RingSegment info;
 
     private static final RectF tempRect = new RectF();
@@ -24,7 +25,7 @@ public class RingSegmentSprite extends ColoredSprite {
         final float strokeWidth = info.outerRadius - info.innerRadius;
         final float halfStroke = strokeWidth / 2;
 
-        mPaint.setStrokeWidth(strokeWidth);
+        mPaint.setStrokeWidth(strokeWidth + SAFETY);
         mPaint.setColor(color.color);
 
         synchronized (tempRect) {

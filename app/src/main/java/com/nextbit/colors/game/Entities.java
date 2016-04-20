@@ -5,13 +5,16 @@ import com.artemis.ArchetypeBuilder;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.nextbit.colors.game.components.CameraFollowComponent;
+import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.ObstacleComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.obstacles.ObstacleGeometry;
 import com.nextbit.colors.game.obstacles.RingSegment;
 import com.nextbit.colors.game.obstacles.RingSegmentSprite;
+import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.util.EntityBody;
 
 import org.dyn4j.dynamics.Body;
@@ -26,6 +29,7 @@ public enum Entities {
     CAMERA,
     PLAYER,
     RING_SEGMENT,
+    COLOR_SWITCH,
     ;
 
     private static final HashMap<Entities, Archetype> archetypes = new HashMap<>();
@@ -45,6 +49,7 @@ public enum Entities {
                 return new ArchetypeBuilder()
                         .add(PhysicsComponent.class,
                                 RenderComponent.class,
+                                ColorComponent.class,
                                 PlayerComponent.class)
                         .build(world);
 
@@ -56,7 +61,14 @@ public enum Entities {
                 return new ArchetypeBuilder()
                         .add(PhysicsComponent.class,
                                 RenderComponent.class,
+                                ColorComponent.class,
                                 ObstacleComponent.class)
+                        .build(world);
+            case COLOR_SWITCH:
+                return new ArchetypeBuilder()
+                        .add(PhysicsComponent.class,
+                                RenderComponent.class,
+                                SwitchComponent.class)
                         .build(world);
         }
 
@@ -65,15 +77,16 @@ public enum Entities {
 
     public static int createPlayer(World world) {
         int id = PLAYER.create(world);
-        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = Assets.player;
-        ComponentMapper.getFor(PlayerComponent.class, world).get(id).color = GameColor.BLUE;
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new PlayerSprite();
+
+        ComponentMapper.getFor(ColorComponent.class, world).get(id).color = GameColor.random();
 
         Body playerBody = new EntityBody(id);
         playerBody.setBullet(true);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
-        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(50));
+        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE));
         bf.setSensor(true);
-        Physics.WORLD.addBody(playerBody);
+        world.getSystem(PhysicsSystem.class).WORLD.addBody(playerBody);
         ComponentMapper.getFor(PhysicsComponent.class, world).get(id).body = playerBody;
 
         return id;
@@ -95,10 +108,9 @@ public enum Entities {
         ring.outerRadius = outerRad;
         ring.sweep = sweep;
 
-        ComponentMapper.getFor(ObstacleComponent.class, world).get(id).color = color;
+        ComponentMapper.getFor(ColorComponent.class, world).get(id).color = color;
 
         RingSegmentSprite ringSprite = new RingSegmentSprite();
-        ringSprite.color = color;
         ringSprite.info = ring;
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = ringSprite;
 
@@ -107,7 +119,7 @@ public enum Entities {
         phys.body.rotateAboutCenter(startAngle);
         phys.body.translate(x, y);
         phys.body.setAngularVelocity(speed);
-        Physics.WORLD.addBody(phys.body);
+        world.getSystem(PhysicsSystem.class).WORLD.addBody(phys.body);
 
         return id;
     }
@@ -121,5 +133,17 @@ public enum Entities {
                     outerRad, (float) (Math.PI / 2), (float) (Math.PI * i / 2) );
             color = (color + 1) % 4;
         }
+    }
+
+    public static int createSwitch(World world, float y) {
+        int id = COLOR_SWITCH.create(world);
+        PhysicsComponent pc = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
+        pc.body = new EntityBody(id);
+        pc.body.translate(0, y);
+        BodyFixture bf = pc.body.addFixture(Geometry.createCircle(SwitchComponent.RADIUS));
+        bf.setSensor(true);
+        world.getSystem(PhysicsSystem.class).WORLD.addBody(pc.body);
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new SwitchSprite();
+        return id;
     }
 }

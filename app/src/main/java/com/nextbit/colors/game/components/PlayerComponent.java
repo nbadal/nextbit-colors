@@ -4,7 +4,7 @@ import com.artemis.Component;
 import com.nextbit.colors.game.GameColor;
 
 public class PlayerComponent extends Component {
-    public GameColor color;
+    public static final float SIZE = 45;
     public int jumpCount;
 
     public boolean isAlive = true;

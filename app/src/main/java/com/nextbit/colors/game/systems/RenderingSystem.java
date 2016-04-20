@@ -4,6 +4,8 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.nextbit.colors.game.Camera;
+import com.nextbit.colors.game.GameColor;
+import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 
@@ -23,6 +25,7 @@ public class RenderingSystem extends BaseEntitySystem {
 
     private ComponentMapper<RenderComponent> renderM;
     private ComponentMapper<PhysicsComponent> transformM;
+    private ComponentMapper<ColorComponent> colorM;
 
     private final Comparator<Integer> mLayerComparator = new Comparator<Integer>() {
         @Override
@@ -56,13 +59,17 @@ public class RenderingSystem extends BaseEntitySystem {
                 continue;
             }
             PhysicsComponent transform = transformM.get(entity);
+            GameColor color = null;
+            if(colorM.has(entity)) {
+                color = colorM.get(entity).color;
+            }
 
             c.save();
             c.translate((float) transform.body.getTransform().getTranslationX(),
                     (float) -transform.body.getTransform().getTranslationY());
             c.rotate((float) -Math.toDegrees(transform.body.getTransform().getRotation()));
 
-            render.sprite.render(c);
+            render.sprite.render(c, color);
 
             c.restore();
 

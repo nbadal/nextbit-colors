@@ -1,37 +1,75 @@
 package com.nextbit.colors.app;
 
+import com.nextbit.colors.game.ColorsGame;
+import com.nextbit.colors.game.Input;
+
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
+import android.graphics.Color;
 
 public class GameLoopThread extends Thread {
     private GameView view;
-    private boolean running = false;
+    private Object mPauseLock = new Object();
+    private boolean mPaused;
+    private ColorsGame game;
+    private long mLastUpdate;
 
     public GameLoopThread(GameView view) {
         this.view = view;
-    }
-
-    public void setRunning(boolean run) {
-        running = run;
+        game = new ColorsGame(view.getContext());
     }
 
     @SuppressLint("WrongCall")
     @Override
     public void run() {
-        while (running) {
-            Canvas c = null;
+        while (true) {
+            Canvas canvas = null;
             try {
-                c = view.getHolder().lockCanvas();
-                if(c != null) {
+                canvas = view.getHolder().lockCanvas();
+                if(canvas != null) {
                     synchronized (view.getHolder()) {
-                        view.onDraw(c);
+
+                        Input.preUpdate();
+                        canvas.drawColor(Color.BLACK);
+
+                        long now = System.currentTimeMillis();
+
+                        game.update(canvas, now - mLastUpdate);
+                        mLastUpdate = now;
+                        Input.postUpdate();
                     }
                 }
             } finally {
-                if (c != null) {
-                    view.getHolder().unlockCanvasAndPost(c);
+                if (canvas != null) {
+                    view.getHolder().unlockCanvasAndPost(canvas);
+                }
+            }
+
+            synchronized (mPauseLock) {
+                while (mPaused) {
+                    try {
+                        mPauseLock.wait();
+                    } catch (InterruptedException e) {
+                    }
                 }
             }
         }
+    }
+
+    public void onPause() {
+        synchronized (mPauseLock) {
+            mPaused = true;
+        }
+    }
+
+    public void onResume() {
+        synchronized (mPauseLock) {
+            mPaused = false;
+            mPauseLock.notifyAll();
+        }
+    }
+
+    public void setSize(int w, int h) {
+        game.setSize(w, h);
     }
 }
