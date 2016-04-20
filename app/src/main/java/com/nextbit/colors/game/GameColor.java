@@ -5,16 +5,16 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 
 public enum GameColor {
-    BLUE  (0xff0000ff),
-    RED   (0xffff0000),
-    PURPLE(0xff800080),
-    GREEN (0xff00ff00),
+    RED   (0xffec4331),
+    YELLOW(0xfff6d70a),
+    GREEN (0xff52c2bf),
+    BLUE  (0xff596eb4),
     ;
 
     public final ColorFilter filter;
     public final int color;
 
-    public static final GameColor[] values = {BLUE, RED, PURPLE, GREEN};
+    public static final GameColor[] values = {RED, YELLOW, GREEN, BLUE};
 
     GameColor(int color) {
         this.color = color;
