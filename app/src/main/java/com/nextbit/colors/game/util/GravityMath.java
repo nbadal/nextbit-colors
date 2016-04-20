@@ -3,7 +3,7 @@ package com.nextbit.colors.game.util;
 
 public class GravityMath {
     /** Height in px */
-    public static final float JUMP_HEIGHT = 150f;
+    public static final float JUMP_HEIGHT = 1.5f;
     /** Time in s */
     public static final float JUMP_TIME = 0.45f;
 

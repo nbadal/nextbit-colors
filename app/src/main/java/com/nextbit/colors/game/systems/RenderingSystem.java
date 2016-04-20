@@ -8,6 +8,7 @@ import com.nextbit.colors.game.GameColor;
 import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.graphics.Assets;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -49,8 +50,8 @@ public class RenderingSystem extends BaseEntitySystem {
         }
         c.save();
         // Offset for camera, Y at bottom of screen
-        c.translate(0, Camera.height);
-        c.translate(-(float)Camera.x, (float)Camera.y);
+        c.translate(0, (float) Camera.heightMeters * Assets.metersToPx);
+        c.translate(-(float)Camera.x * Assets.metersToPx , (float)Camera.y * Assets.metersToPx);
 
         Collections.sort(renderQueue, mLayerComparator);
         for(int entity : renderQueue) {
@@ -65,8 +66,8 @@ public class RenderingSystem extends BaseEntitySystem {
             }
 
             c.save();
-            c.translate((float) transform.body.getTransform().getTranslationX(),
-                    (float) -transform.body.getTransform().getTranslationY());
+            c.translate((float) transform.body.getTransform().getTranslationX() * Assets.metersToPx,
+                    (float) -transform.body.getTransform().getTranslationY() * Assets.metersToPx);
             c.rotate((float) -Math.toDegrees(transform.body.getTransform().getRotation()));
 
             render.sprite.render(c, color);

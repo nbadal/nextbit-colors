@@ -8,6 +8,6 @@ public class Camera {
     public static double x;
     public static double y;
 
-    public static int width;
-    public static int height;
+    public static double widthMeters;
+    public static double heightMeters;
 }

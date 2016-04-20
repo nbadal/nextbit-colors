@@ -11,9 +11,11 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
+import com.nextbit.colors.game.graphics.Assets;
+import com.nextbit.colors.game.graphics.SwitchSprite;
 import com.nextbit.colors.game.obstacles.ObstacleGeometry;
 import com.nextbit.colors.game.obstacles.RingSegment;
-import com.nextbit.colors.game.obstacles.RingSegmentSprite;
+import com.nextbit.colors.game.graphics.RingSegmentSprite;
 import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.util.EntityBody;
 
@@ -23,8 +25,6 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
-
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -89,7 +89,7 @@ public enum Entities {
         Body playerBody = new EntityBody(id);
 //        playerBody.setBullet(true);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
-        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE));
+        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE * 0.75));
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PLAYER,
                 PhysicsSystem.CAT_OBSTACLE | PhysicsSystem.CAT_SWITCH));

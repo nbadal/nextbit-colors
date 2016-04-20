@@ -24,7 +24,7 @@ public class CameraFollowSystem extends IteratingSystem {
         PhysicsComponent target = transformM.get(cfc.target);
 
         double distanceAboveCam = target.body.getTransform().getTranslationY() - Camera.y;
-        float maxY = Camera.height / 2;
+        double maxY = Camera.heightMeters / 2;
         if(distanceAboveCam > maxY) {
             double amountToMove = distanceAboveCam - maxY;
             Camera.y += amountToMove * Math.min(1.0, getWorld().getDelta() * SPEED);

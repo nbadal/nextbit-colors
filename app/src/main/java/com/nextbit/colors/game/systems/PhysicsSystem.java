@@ -44,7 +44,6 @@ public class PhysicsSystem extends BaseEntitySystem {
 
         WORLD.setGravity(new Vector2(0, GravityMath.GRAVITY));
         Settings settings = new Settings();
-        settings.setMaximumTranslation(50);
         settings.setContinuousDetectionMode(ContinuousDetectionMode.BULLETS_ONLY);
         WORLD.setSettings(settings);
         WORLD.addListener(new ContactAdapter() {

@@ -7,8 +7,6 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.obstacles.Obstacles;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,7 +14,7 @@ import java.util.HashSet;
 
 public class LevelGeneratorSystem extends IteratingSystem {
 
-    private static final double GENERATE_BEGIN = 1000;
+    private static final double GENERATE_BEGIN = 4.5;
     private static final Comparator<? super ObstacleSet> OBSTACLE_COMPARATOR = new ObstacleSet.Comparator();
 
     private ArrayList<ObstacleSet> obstacles = new ArrayList<>();
@@ -28,7 +26,7 @@ public class LevelGeneratorSystem extends IteratingSystem {
     @Override
     protected void process(int entityId) {
         final double generateStart = Math.max(Camera.y, GENERATE_BEGIN);
-        final double generateEnd = Camera.y + Camera.height;
+        final double generateEnd = Camera.y + Camera.heightMeters;
 
         // Remove invalid obstacles
         ArrayList<ObstacleSet> validObstacles = new ArrayList<>();

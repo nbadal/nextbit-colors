@@ -23,8 +23,8 @@ public class CullingSystem extends IteratingSystem {
 
 
         double y = phys.body.getTransform().getTranslationY();
-        double height = render.sprite.getHeight();
-        boolean onscreen = !(y - height > Camera.y + Camera.height || y + height < Camera.y);
+        double height = render.sprite.getHeightMeters();
+        boolean onscreen = !(y - height > Camera.y + Camera.heightMeters || y + height < Camera.y);
 
         render.onScreen = onscreen;
         phys.body.setActive(onscreen);

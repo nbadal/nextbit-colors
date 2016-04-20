@@ -3,6 +3,7 @@ package com.nextbit.colors.game;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
+import com.nextbit.colors.game.graphics.Assets;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
 import com.nextbit.colors.game.systems.CullingSystem;
 import com.nextbit.colors.game.systems.LavaSystem;
@@ -50,12 +51,15 @@ public class ColorsGame {
         Entities.createCamera(world, player);
     }
 
-    public void setSize(int width, int height) {
-        if(width != Camera.width || height != Camera.height) {
-            Camera.width = width;
-            Camera.height = height;
+    public void setSize(int widthPx, int heightPx) {
+        final double widthMeters = widthPx * Assets.pxToMeters;
+        final double heightMeters = heightPx * Assets.pxToMeters;
 
-            Camera.x = -width/2;
+        if(widthMeters != Camera.widthMeters || heightMeters != Camera.heightMeters) {
+            Camera.widthMeters = widthMeters ;
+            Camera.heightMeters = heightMeters;
+
+            Camera.x = -widthMeters/2;
         }
     }
 
