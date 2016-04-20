@@ -8,6 +8,7 @@ import com.nextbit.colors.game.components.CameraFollowComponent;
 import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.GameOverComponent;
 import com.nextbit.colors.game.components.ObstacleComponent;
+import com.nextbit.colors.game.components.PhoneComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
@@ -44,6 +45,7 @@ public enum Entities {
     GAME_OVER,
     RING_SEGMENT,
     COLOR_SWITCH,
+    PHONE,
     ;
 
     private static final HashMap<Entities, Archetype> archetypes = new HashMap<>();
@@ -102,6 +104,12 @@ public enum Entities {
                                 RenderComponent.class,
                                 SwitchComponent.class)
                         .build(world);
+            case PHONE:
+                return new ArchetypeBuilder()
+                        .add(PhysicsComponent.class,
+                                RenderComponent.class,
+                                PhoneComponent.class)
+                        .build(world);
         }
 
         return null;
@@ -118,7 +126,7 @@ public enum Entities {
         BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE * 0.75));
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PLAYER,
-                PhysicsSystem.CAT_OBSTACLE | PhysicsSystem.CAT_SWITCH));
+                PhysicsSystem.CAT_OBSTACLE | PhysicsSystem.CAT_SWITCH | PhysicsSystem.CAT_PHONE));
         world.getSystem(PhysicsSystem.class).addBody(playerBody);
         ComponentMapper.getFor(PhysicsComponent.class, world).get(id).body = playerBody;
 
@@ -159,7 +167,8 @@ public enum Entities {
         ui.isWorldPosition = true;
         ui.position.y = PlayerFloorSystem.FLOOR_POS / 2;
 
-        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite("START");
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite =
+                new TextSprite("TAP TO JUMP");
         return id;
     }
 
@@ -204,6 +213,7 @@ public enum Entities {
 
     public static int createSwitch(World world, double y) {
         int id = COLOR_SWITCH.create(world);
+
         PhysicsComponent pc = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
         pc.body = new EntityBody(id);
         pc.body.translate(0, y);
@@ -211,7 +221,23 @@ public enum Entities {
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_SWITCH, PhysicsSystem.CAT_PLAYER));
         world.getSystem(PhysicsSystem.class).addBody(pc.body);
+
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new SwitchSprite();
+        return id;
+    }
+
+    public static int createPhone(World world, double y) {
+        int id = PHONE.create(world);
+
+        PhysicsComponent pc = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
+        pc.body = new EntityBody(id);
+        pc.body.translate(0, y);
+        BodyFixture bf = pc.body.addFixture(Geometry.createCircle(ScoreComponent.RADIUS));
+        bf.setSensor(true);
+        bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PHONE, PhysicsSystem.CAT_PLAYER));
+        world.getSystem(PhysicsSystem.class).addBody(pc.body);
+
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = Assets.phone;
         return id;
     }
 }

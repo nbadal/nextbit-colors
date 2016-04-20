@@ -71,6 +71,9 @@ public class PlayerRespawnSystem extends IteratingSystem {
             getWorld().delete(gameOvers.get(i));
         }
 
+        // Reset Score
+        pc.score = 0;
+
         // Show Player
         render.enabled = true;
     }

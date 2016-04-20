@@ -13,9 +13,10 @@ public class Assets {
 
     public static double pxToMeters;
     public static float metersToPx;
-    public static Paint textPaint;
 
+    public static Paint textPaint;
     public static DrawableSprite sheep;
+    public static DrawableSprite phone;
 
     public static void load(Context context) {
         final Resources res = context.getResources();
@@ -23,6 +24,8 @@ public class Assets {
 
         metersToPx = sheep.getHeightPx();
         pxToMeters = 1.0 / metersToPx;
+
+        phone = new DrawableSprite(res.getDrawable(R.drawable.phone));
 
         textPaint = new Paint();
         textPaint.setColor(TEXT_COLOR);

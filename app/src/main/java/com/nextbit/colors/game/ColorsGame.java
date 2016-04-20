@@ -12,6 +12,7 @@ import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.systems.PlayerAnimationSystem;
 import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
+import com.nextbit.colors.game.systems.PlayerScoreSystem;
 import com.nextbit.colors.game.systems.PlayerTapSystem;
 import com.nextbit.colors.game.systems.PlayerRespawnSystem;
 import com.nextbit.colors.game.systems.RenderingSystem;
@@ -30,6 +31,7 @@ public class ColorsGame {
                     new PlayerTapSystem(),
                     new PlayerAnimationSystem(),
                     new PhysicsSystem(),
+                    new PlayerScoreSystem(),
                     new CullingSystem(),
                     new PlayerFloorSystem(),
                     new CameraFollowSystem(),

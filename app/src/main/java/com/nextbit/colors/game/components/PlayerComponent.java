@@ -18,6 +18,8 @@ public class PlayerComponent extends Component {
     public boolean respawnHandled;
     private long deathTime;
 
+    public int score;
+
     public void kill() {
         if(!isAlive) return;
 
