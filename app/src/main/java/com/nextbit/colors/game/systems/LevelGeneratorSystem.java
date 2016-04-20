@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 public class LevelGeneratorSystem extends IteratingSystem {
 
-    private static final double GENERATE_BEGIN = 4.5;
+    private static final double GENERATE_BEGIN = 8;
     private static final Comparator<? super ObstacleSet> OBSTACLE_COMPARATOR = new ObstacleSet.Comparator();
 
     private ArrayList<ObstacleSet> obstacles = new ArrayList<>();

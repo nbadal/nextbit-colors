@@ -14,7 +14,7 @@ public enum Obstacles {
     public static final double SPACING = GravityMath.JUMP_HEIGHT * 3.0;
     public static final double CIRCLE_SPEED = Math.PI / 2;
     public static final double RING_WIDTH = 0.3;
-    public static final double BIG_RADIUS = 2.5;
+    public static final double BIG_RADIUS = 4.0;
 
     public Set<Integer> create(World world, double y, double difficulty) {
         HashSet<Integer> ids = new HashSet<>();
