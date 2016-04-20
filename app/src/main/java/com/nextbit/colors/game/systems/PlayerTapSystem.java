@@ -3,6 +3,7 @@ package com.nextbit.colors.game.systems;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
+import com.nextbit.colors.game.ColorsGame;
 import com.nextbit.colors.game.Input;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
@@ -33,6 +34,7 @@ public class PlayerTapSystem extends IteratingSystem {
                     factor = 1.5d; // First jump is high
                 }
                 phys.body.setLinearVelocity(0, GravityMath.JUMP_VELOCITY * factor);
+                player.jumpTime = System.currentTimeMillis();
                 player.jumpCount++;
             } else {
                 // Flag for respawn

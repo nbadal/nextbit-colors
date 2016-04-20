@@ -9,6 +9,7 @@ import com.nextbit.colors.game.systems.CullingSystem;
 import com.nextbit.colors.game.systems.LavaSystem;
 import com.nextbit.colors.game.systems.LevelGeneratorSystem;
 import com.nextbit.colors.game.systems.PhysicsSystem;
+import com.nextbit.colors.game.systems.PlayerAnimationSystem;
 import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.systems.PlayerTapSystem;
@@ -27,6 +28,7 @@ public class ColorsGame {
     private WorldConfiguration config = new WorldConfigurationBuilder()
             .with(
                     new PlayerTapSystem(),
+                    new PlayerAnimationSystem(),
                     new PhysicsSystem(),
                     new CullingSystem(),
                     new PlayerFloorSystem(),
