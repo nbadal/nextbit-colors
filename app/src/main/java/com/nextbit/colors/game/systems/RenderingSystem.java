@@ -55,7 +55,7 @@ public class RenderingSystem extends BaseEntitySystem {
         Collections.sort(renderQueue, mLayerComparator);
         for(int entity : renderQueue) {
             RenderComponent render = renderM.get(entity);
-            if(!render.enabled) {
+            if(render == null || !render.enabled || !render.onScreen) {
                 continue;
             }
             PhysicsComponent transform = transformM.get(entity);
@@ -88,6 +88,6 @@ public class RenderingSystem extends BaseEntitySystem {
     protected void removed(int entityId) {
         super.removed(entityId);
 
-        renderQueue.remove(entityId);
+        renderQueue.remove((Integer) entityId);
     }
 }

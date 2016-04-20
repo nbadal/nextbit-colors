@@ -24,8 +24,13 @@ public class DrawableSprite extends Sprite {
     @Override
     public void render(Canvas canvas, GameColor color) {
         canvas.save();
-//        canvas.translate(0, mDrawable.getBounds().top);
+        mDrawable.setColorFilter(color.filter);
         mDrawable.draw(canvas);
         canvas.restore();
+    }
+
+    @Override
+    public double getHeight() {
+        return mDrawable.getIntrinsicHeight();
     }
 }

@@ -13,4 +13,9 @@ public class EntityBody extends Body {
         super(fixtureCount);
         this.entityId = entityId;
     }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
 }

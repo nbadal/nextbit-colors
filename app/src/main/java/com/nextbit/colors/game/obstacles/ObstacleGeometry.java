@@ -1,7 +1,9 @@
 package com.nextbit.colors.game.obstacles;
 
+import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.util.EntityBody;
 
+import org.dyn4j.collision.CategoryFilter;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Polygon;
@@ -14,10 +16,10 @@ public class ObstacleGeometry {
     /** Create a ring made of polygonal segments */
     public static Body createRingSegment(int entityId, RingSegment info) {
         Body body = new EntityBody(entityId, RING_SUBDIVS);
-        final float subDivAmt = info.sweep / RING_SUBDIVS;
+        final double subDivAmt = info.sweep / RING_SUBDIVS;
         for(int i = 0; i < RING_SUBDIVS; i++) {
-            float angle1 = i * subDivAmt;
-            float angle2 = (i + 1) * subDivAmt;
+            double angle1 = i * subDivAmt;
+            double angle2 = (i + 1) * subDivAmt;
 
             Vector2 inner1 = createPolarPoint(angle1, info.innerRadius);
             Vector2 inner2 = createPolarPoint(angle2, info.innerRadius);
@@ -26,11 +28,12 @@ public class ObstacleGeometry {
 
             BodyFixture bf = body.addFixture(new Polygon(inner1, outer1, outer2, inner2));
             bf.setSensor(true);
+            bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_OBSTACLE, PhysicsSystem.CAT_PLAYER));
         }
         return body;
     }
 
-    private static Vector2 createPolarPoint(float angle, float radius) {
+    private static Vector2 createPolarPoint(double angle, double radius) {
         return new Vector2(radius * Math.cos(angle), radius * Math.sin(angle));
     }
 }

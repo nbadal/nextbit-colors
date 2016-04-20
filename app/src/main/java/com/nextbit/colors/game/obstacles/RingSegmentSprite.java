@@ -22,16 +22,21 @@ public class RingSegmentSprite extends Sprite {
 
     @Override
     public void render(Canvas canvas, GameColor color) {
-        final float strokeWidth = info.outerRadius - info.innerRadius;
+        final float strokeWidth = (float) (info.outerRadius - info.innerRadius);
         final float halfStroke = strokeWidth / 2;
 
         mPaint.setStrokeWidth(strokeWidth + SAFETY);
         mPaint.setColor(color.color);
 
         synchronized (tempRect) {
-            final float size = info.outerRadius - halfStroke;
+            final float size = (float) (info.outerRadius - halfStroke);
             tempRect.set(-size, -size, size, size);
             canvas.drawArc(tempRect, 0, (float) -Math.toDegrees(info.sweep), false, mPaint);
         }
+    }
+
+    @Override
+    public double getHeight() {
+        return info.outerRadius;
     }
 }

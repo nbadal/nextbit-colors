@@ -4,7 +4,9 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
+import com.nextbit.colors.game.systems.CullingSystem;
 import com.nextbit.colors.game.systems.LavaSystem;
+import com.nextbit.colors.game.systems.LevelGeneratorSystem;
 import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
@@ -25,8 +27,10 @@ public class ColorsGame {
             .with(
                     new PlayerTapSystem(),
                     new PhysicsSystem(),
+                    new CullingSystem(),
                     new PlayerFloorSystem(),
                     new CameraFollowSystem(),
+                    new LevelGeneratorSystem(),
                     new PlayerRespawnSystem(),
                     new LavaSystem(),
                     new PlayerDeathSystem(),
@@ -40,11 +44,10 @@ public class ColorsGame {
     public ColorsGame(Context context) {
         mContext = context;
 
+        Assets.load(context);
+
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
-
-        Entities.createRing(world, Math.PI / 2, 0, 1300, 230, 270);
-        Entities.createSwitch(world, 1300);
     }
 
     public void setSize(int width, int height) {

@@ -14,8 +14,13 @@ public class SwitchSprite extends Sprite {
     public void render(Canvas canvas, GameColor color) {
         for(int i = 0; i < 4; i++) {
             int angle = i * 90;
-            PAINT.setColor(GameColor.values()[i].color);
+            PAINT.setColor(GameColor.values[i].color);
             canvas.drawArc(BOUNDS, angle, 90, true, PAINT);
         }
+    }
+
+    @Override
+    public double getHeight() {
+        return SwitchComponent.RADIUS;
     }
 }

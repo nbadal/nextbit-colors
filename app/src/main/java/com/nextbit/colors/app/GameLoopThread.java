@@ -8,8 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 
 public class GameLoopThread extends Thread {
+    final private Object mPauseLock = new Object();
     private GameView view;
-    private Object mPauseLock = new Object();
     private boolean mPaused;
     private ColorsGame game;
     private long mLastUpdate;

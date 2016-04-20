@@ -14,17 +14,19 @@ public enum GameColor {
     public final ColorFilter filter;
     public final int color;
 
+    public static final GameColor[] values = {BLUE, RED, PURPLE, GREEN};
+
     GameColor(int color) {
         this.color = color;
         filter = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
     public static GameColor random() {
-        return values()[ColorsGame.random.nextInt(4)];
+        return values[ColorsGame.random.nextInt(4)];
     }
 
     public static GameColor random(GameColor except) {
         final int newColorIdx = (except.ordinal() + 1 + ColorsGame.random.nextInt(3)) % 4;
-        return GameColor.values()[newColorIdx];
+        return GameColor.values[newColorIdx];
     }
 }

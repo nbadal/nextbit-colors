@@ -1,7 +1,7 @@
 package com.nextbit.colors.game.obstacles;
 
 public class RingSegment {
-    public float outerRadius;
-    public float innerRadius;
-    public float sweep;
+    public double outerRadius;
+    public double innerRadius;
+    public double sweep;
 }

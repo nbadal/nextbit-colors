@@ -13,6 +13,7 @@ import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.util.EntityBody;
 import com.nextbit.colors.game.util.GravityMath;
 
+import org.dyn4j.dynamics.ContinuousDetectionMode;
 import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactAdapter;
@@ -24,6 +25,10 @@ import android.util.Pair;
 import java.util.HashSet;
 
 public class PhysicsSystem extends BaseEntitySystem {
+    public static final long CAT_PLAYER = 1 << 0;
+    public static final long CAT_OBSTACLE = 1 << 1;
+    public static final long CAT_SWITCH = 1 << 2;
+
     public final World WORLD = new World();
     public final HashSet<Pair<Integer, Integer>> COLLISIONS = new HashSet<>();
 
@@ -32,6 +37,7 @@ public class PhysicsSystem extends BaseEntitySystem {
     private ComponentMapper<SwitchComponent> switchM;
     private ComponentMapper<RenderComponent> renderM;
     private ComponentMapper<ColorComponent> colorM;
+    private ComponentMapper<PhysicsComponent> physicsM;
 
     public PhysicsSystem() {
         super(Aspect.all(PhysicsComponent.class));
@@ -39,6 +45,7 @@ public class PhysicsSystem extends BaseEntitySystem {
         WORLD.setGravity(new Vector2(0, GravityMath.GRAVITY));
         Settings settings = new Settings();
         settings.setMaximumTranslation(50);
+        settings.setContinuousDetectionMode(ContinuousDetectionMode.BULLETS_ONLY);
         WORLD.setSettings(settings);
         WORLD.addListener(new ContactAdapter() {
             @Override
@@ -49,6 +56,14 @@ public class PhysicsSystem extends BaseEntitySystem {
                 ));
             }
         });
+    }
+
+    // bodies must be added outside of this system because we usually set the body after creation
+
+    @Override
+    protected void removed(int entityId) {
+        super.removed(entityId);
+        WORLD.removeBody(physicsM.get(entityId).body);
     }
 
     @Override

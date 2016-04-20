@@ -17,13 +17,18 @@ import com.nextbit.colors.game.obstacles.RingSegmentSprite;
 import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.util.EntityBody;
 
+import org.dyn4j.collision.CategoryFilter;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
 
+import android.util.Log;
+
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public enum Entities {
     CAMERA,
@@ -77,15 +82,17 @@ public enum Entities {
 
     public static int createPlayer(World world) {
         int id = PLAYER.create(world);
-        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new PlayerSprite();
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = Assets.sheep;
 
         ComponentMapper.getFor(ColorComponent.class, world).get(id).color = GameColor.random();
 
         Body playerBody = new EntityBody(id);
-        playerBody.setBullet(true);
+//        playerBody.setBullet(true);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
         BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE));
         bf.setSensor(true);
+        bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PLAYER,
+                PhysicsSystem.CAT_OBSTACLE | PhysicsSystem.CAT_SWITCH));
         world.getSystem(PhysicsSystem.class).WORLD.addBody(playerBody);
         ComponentMapper.getFor(PhysicsComponent.class, world).get(id).body = playerBody;
 
@@ -99,8 +106,8 @@ public enum Entities {
     }
 
     public static int createRingSegment(World world, GameColor color, double speed,
-                                        float x, float y, float innerRad, float outerRad,
-                                        float sweep, float startAngle) {
+                                        double x, double y, double innerRad, double outerRad,
+                                        double sweep, double startAngle) {
         int id = RING_SEGMENT.create(world);
 
         RingSegment ring = new RingSegment();
@@ -124,24 +131,27 @@ public enum Entities {
         return id;
     }
 
-    public static void createRing(World world, double speed, float x, float y,
-                                  float innerRad, float outerRad) {
+    public static Set<Integer> createRing(World world, double speed, double x, double y,
+                                          double innerRad, double outerRad) {
+        HashSet<Integer> ids = new HashSet<>();
         int color = ColorsGame.random.nextInt(4);
         for(int i = 0; i < 4; i++) {
-            Entities.createRingSegment(world, GameColor.values()[color], speed, x, y,
-                    innerRad,
-                    outerRad, (float) (Math.PI / 2), (float) (Math.PI * i / 2) );
+            final int id = Entities.createRingSegment(world, GameColor.values[color], speed, x, y,
+                    innerRad, outerRad, (float) (Math.PI / 2), (float) (Math.PI * i / 2) );
+            ids.add(id);
             color = (color + 1) % 4;
         }
+        return ids;
     }
 
-    public static int createSwitch(World world, float y) {
+    public static int createSwitch(World world, double y) {
         int id = COLOR_SWITCH.create(world);
         PhysicsComponent pc = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
         pc.body = new EntityBody(id);
         pc.body.translate(0, y);
         BodyFixture bf = pc.body.addFixture(Geometry.createCircle(SwitchComponent.RADIUS));
         bf.setSensor(true);
+        bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_SWITCH, PhysicsSystem.CAT_PLAYER));
         world.getSystem(PhysicsSystem.class).WORLD.addBody(pc.body);
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new SwitchSprite();
         return id;
