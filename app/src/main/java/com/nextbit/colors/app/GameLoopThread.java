@@ -6,8 +6,10 @@ import com.nextbit.colors.game.Input;
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 
 public class GameLoopThread extends Thread {
+    private static final String TAG = GameLoopThread.class.getSimpleName();
     final private Object mPauseLock = new Object();
     private GameView view;
 
@@ -44,7 +46,11 @@ public class GameLoopThread extends Thread {
                 }
             } finally {
                 if (canvas != null) {
-                    view.getHolder().unlockCanvasAndPost(canvas);
+                    try {
+                        view.getHolder().unlockCanvasAndPost(canvas);
+                    } catch (IllegalStateException ise) {
+                        Log.w(TAG, "Illegal State", ise);
+                    }
                 }
             }
 
