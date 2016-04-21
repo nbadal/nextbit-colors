@@ -7,7 +7,7 @@ import android.graphics.PorterDuffColorFilter;
 public enum GameColor {
     RED   (0xffec4331),
     YELLOW(0xfff6d70a),
-    GREEN (0xff52c2bf),
+    GREEN (0xff52c272),
     BLUE  (0xff596eb4),
     ;
 

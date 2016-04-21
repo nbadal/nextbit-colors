@@ -13,7 +13,7 @@ import android.graphics.RectF;
 import java.util.ArrayList;
 
 public class BackgroundRenderSystem extends BaseSystem {
-    private static final int COLOR_SKY = 0xffa3d9d9;
+    private static final int COLOR_SKY = 0xff99d9d9;
     private static final Paint sPaint = new Paint();
     private static final RectF sTempRect = new RectF();
     private static final int COLOR_GROUND = 0xff44b425;
@@ -23,8 +23,8 @@ public class BackgroundRenderSystem extends BaseSystem {
     private static final int NUM_SKYLINES = 3;
     private static final int MIN_SKYLINE_BRIGHTNESS = 96;
     private static final int MAX_SKYLINE_BRIGHTNESS = 112;
-    private static final int SKYLINE_OFFSET = 300;
-    private static final int SKYLINE_START = 100;
+    private static final int SKYLINE_OFFSET = 200;
+    private static final int SKYLINE_START = 300;
     private static final float MAX_SKYLINE_PARALLAX = 0.5f;
 
     @Override

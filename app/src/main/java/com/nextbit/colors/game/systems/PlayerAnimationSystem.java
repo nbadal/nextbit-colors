@@ -18,13 +18,15 @@ public class PlayerAnimationSystem extends IteratingSystem {
     @Override
     protected void process(int entityId) {
         PlayerComponent pc = playerM.get(entityId);
+        PhysicsComponent phys = physicsM.get(entityId);
+
         long now = System.currentTimeMillis();
         final double animPos = (now - pc.jumpTime) / PlayerComponent.JUMP_ANIM_LENGTH;
-        if(animPos > 0. && animPos < 1.) {
-            PhysicsComponent phys = physicsM.get(entityId);
 
-            phys.body.getTransform().setRotation(Math.sin(2 * Math.PI * animPos) *
-                    PlayerComponent.JUMP_WIGGLE_RANGE);
+        double angle = 0;
+        if(animPos > 0. && animPos < 1.) {
+            angle = Math.sin(2 * Math.PI * animPos) * PlayerComponent.JUMP_WIGGLE_RANGE;
         }
+        phys.body.getTransform().setRotation(angle);
     }
 }
