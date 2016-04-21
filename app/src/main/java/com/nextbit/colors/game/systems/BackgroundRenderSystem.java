@@ -1,8 +1,14 @@
 package com.nextbit.colors.game.systems;
 
+import com.artemis.Aspect;
 import com.artemis.BaseSystem;
+import com.artemis.ComponentMapper;
+import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.ColorsGame;
+import com.nextbit.colors.game.components.PhoneComponent;
+import com.nextbit.colors.game.components.PhysicsComponent;
+import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.graphics.Assets;
 
 import android.graphics.Canvas;
@@ -10,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 
 public class BackgroundRenderSystem extends BaseSystem {
@@ -17,15 +24,18 @@ public class BackgroundRenderSystem extends BaseSystem {
     private static final Paint sPaint = new Paint();
     private static final RectF sTempRect = new RectF();
     private static final int COLOR_GROUND = 0xff44b425;
-    private ArrayList<Skyline> mSkylines = new ArrayList<>();
-
-
+    private static final int COLOR_SHADOW = 0x88000000;
     private static final int NUM_SKYLINES = 3;
+
+
     private static final int MIN_SKYLINE_BRIGHTNESS = 96;
     private static final int MAX_SKYLINE_BRIGHTNESS = 112;
     private static final int SKYLINE_OFFSET = 200;
     private static final int SKYLINE_START = 300;
     private static final float MAX_SKYLINE_PARALLAX = 0.5f;
+
+    private ComponentMapper<PhysicsComponent> physM;
+    private ArrayList<Skyline> mSkylines = new ArrayList<>();
 
     @Override
     protected void processSystem() {
@@ -57,9 +67,38 @@ public class BackgroundRenderSystem extends BaseSystem {
             }
         }
 
+        float cameraWidthPx = (float) (Camera.widthMeters * Assets.metersToPx);
+
+        float hillHeightPx = (float) ((PlayerFloorSystem.FLOOR_POS + 0.5) * Assets.metersToPx);
         sPaint.setColor(COLOR_GROUND);
-        sTempRect.set(-30, -150, (float) (Camera.widthMeters * Assets.metersToPx) + 30, 150);
+        sTempRect.set(-30, -hillHeightPx, cameraWidthPx + 30, hillHeightPx);
         c.drawOval(sTempRect, sPaint);
+
+        IntBag players = getWorld().getAspectSubscriptionManager().get(
+                Aspect.all(PlayerComponent.class, PhysicsComponent.class)).getEntities();
+        if(!players.isEmpty()) {
+            double playerYMeters = physM.get(players.get(0)).body.getTransform().getTranslationY();
+            double floorMeters = PlayerFloorSystem.FLOOR_POS;
+
+            float distToFloorPx = (float) ((playerYMeters - floorMeters) * Assets.metersToPx);
+            distToFloorPx /= 8f;
+
+            float ovalWidthPx = Assets.metersToPx;
+            float ovalHeightPx = (Assets.metersToPx / 2);
+
+            float heightFactor = 1f - distToFloorPx / hillHeightPx;
+
+            c.save();
+            c.translate(cameraWidthPx / 2, (float) (floorMeters * Assets.metersToPx) -
+                    distToFloorPx);
+            c.scale(3f - 2f * heightFactor, 1f);
+
+            sPaint.setColor(multAlpha(COLOR_SHADOW, heightFactor));
+            sTempRect.set(-ovalWidthPx / 2, - ovalHeightPx / 2, ovalWidthPx / 2, ovalHeightPx / 2);
+            c.drawOval(sTempRect, sPaint);
+
+            c.restore();
+        }
 
         c.restore();
     }
@@ -78,6 +117,11 @@ public class BackgroundRenderSystem extends BaseSystem {
             skyline.color = getGray(i / (float) NUM_SKYLINES);
             mSkylines.add(skyline);
         }
+    }
+
+    private int multAlpha(int color, float factor) {
+        return Color.argb((int) (Color.alpha(color) * factor),
+                Color.red(color), Color.green(color), Color.blue(color));
     }
 
     private int getGray(float blend) {

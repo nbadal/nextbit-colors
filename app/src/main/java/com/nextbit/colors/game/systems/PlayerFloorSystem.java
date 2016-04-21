@@ -20,8 +20,12 @@ public class PlayerFloorSystem extends IteratingSystem {
     protected void process(int entity) {
         PhysicsComponent trans = transformM.get(entity);
 
-        if(trans.body.getTransform().getTranslationY() <= FLOOR_POS) {
-            trans.body.getTransform().setTranslationY(FLOOR_POS);
+        double playerY = trans.body.getTransform().getTranslationY();
+        double playerFootY = playerY - 0.5;
+        double distToFloor = playerFootY - FLOOR_POS;
+
+        if(distToFloor < 0) {
+            trans.body.translate(0, -distToFloor);
             trans.body.setLinearVelocity(0, 0);
         }
     }
