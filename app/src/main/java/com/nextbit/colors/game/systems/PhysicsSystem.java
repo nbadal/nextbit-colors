@@ -105,10 +105,11 @@ public class PhysicsSystem extends BaseEntitySystem {
             // Color Switches
             if(switchM.has(collided)) {
                 RenderComponent rc = renderM.get(collided);
+                SwitchComponent sw = switchM.get(collided);
                 if(rc.enabled) {
                     rc.enabled = false;
 
-                    playerCc.color = GameColor.random(playerCc.color);
+                    playerCc.color = sw.color;
                 }
             }
 

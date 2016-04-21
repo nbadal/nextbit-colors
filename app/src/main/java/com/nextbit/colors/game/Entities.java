@@ -180,13 +180,18 @@ public enum Entities {
         return id;
     }
 
-    public static Set<Integer> createRing(World world, double speed, double x, double y,
-                                          double innerRad, double outerRad) {
+    public static Set<Integer> createRing(World world, double speed,
+                                          double x, double y, double innerRad, double outerRad) {
+        return createRing(world, GameColor.random(), speed, x, y, innerRad, outerRad);
+    }
+
+    public static Set<Integer> createRing(World world, GameColor startColor, double speed,
+                                          double x, double y, double innerRad, double outerRad) {
         HashSet<Integer> ids = new HashSet<>();
-        int color = ColorsGame.random.nextInt(4);
+        int color = startColor.ordinal();
         for(int i = 0; i < 4; i++) {
             final int id = Entities.createRingSegment(world, GameColor.values[color], speed, x, y,
-                    innerRad, outerRad, (float) (Math.PI / 2), (float) (Math.PI * i / 2) );
+                    innerRad, outerRad, (float) (Math.PI / 2), (float) (Math.PI * (0.5*i - 0.75)));
             ids.add(id);
             color = (color + 1) % 4;
         }
@@ -194,14 +199,22 @@ public enum Entities {
     }
 
     public static int createSwitch(World world, double y) {
+        return createSwitch(world, y, GameColor.random());
+    }
+
+    public static int createSwitch(World world, double y, GameColor color) {
         int id = COLOR_SWITCH.create(world);
 
         PhysicsComponent pc = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
         pc.body = new EntityBody(id);
         pc.body.translate(0, y);
+
         BodyFixture bf = pc.body.addFixture(Geometry.createCircle(SwitchComponent.RADIUS));
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_SWITCH, PhysicsSystem.CAT_PLAYER));
+
+        ComponentMapper.getFor(SwitchComponent.class, world).get(id).color = color;
+
         world.getSystem(PhysicsSystem.class).addBody(pc.body);
 
         RenderComponent render = ComponentMapper.getFor(RenderComponent.class, world).get(id);
