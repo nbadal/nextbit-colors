@@ -32,4 +32,15 @@ public enum GameColor {
         final int newColorIdx = (except.ordinal() + 1 + ColorsGame.random.nextInt(3)) % 4;
         return GameColor.values[newColorIdx];
     }
+
+    public GameColor opposite() {
+        return offset(2);
+    }
+
+    public GameColor offset(int offset) {
+        while(offset < 0) {
+            offset += 4;
+        }
+        return GameColor.values[(ordinal() + offset) % 4];
+    }
 }
