@@ -15,7 +15,9 @@ import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.util.EntityBody;
 import com.nextbit.colors.game.util.GravityMath;
 
+import org.dyn4j.collision.broadphase.Sap;
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.ContinuousDetectionMode;
 import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
@@ -51,6 +53,7 @@ public class PhysicsSystem extends BaseEntitySystem {
         Settings settings = new Settings();
         settings.setContinuousDetectionMode(ContinuousDetectionMode.BULLETS_ONLY);
         mWorld.setSettings(settings);
+        mWorld.setBroadphaseDetector(new Sap<Body, BodyFixture>());
         mWorld.addListener(new ContactAdapter() {
             @Override
             public void sensed(ContactPoint point) {
@@ -75,7 +78,7 @@ public class PhysicsSystem extends BaseEntitySystem {
 
     @Override
     protected void processSystem() {
-        mWorld.update(getWorld().getDelta());
+        mWorld.updatev(getWorld().getDelta());
         for(Pair<Integer, Integer> collision : COLLISIONS) {
             final int player, collided;
             if(playerM.has(collision.first)) {
