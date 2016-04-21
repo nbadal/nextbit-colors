@@ -31,7 +31,7 @@ public enum ObstacleType {
     public static final double CIRCLE_SPEED = Math.PI / 2;
     public static final double TOUCHING_SPEED = CIRCLE_SPEED;
 
-    public static final double RING_WIDTH = 0.3;
+    public static final double RING_WIDTH = 0.5;
     public static final double RING_SPACING = 0.2;
     public static final double BIG_RADIUS = 4.0;
     public static final double SMALL_RADIUS = 3;

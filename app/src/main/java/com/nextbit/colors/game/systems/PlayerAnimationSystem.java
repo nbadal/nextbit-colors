@@ -27,6 +27,9 @@ public class PlayerAnimationSystem extends IteratingSystem {
         if(animPos > 0. && animPos < 1.) {
             angle = Math.sin(2 * Math.PI * animPos) * PlayerComponent.JUMP_WIGGLE_RANGE;
         }
+        if(!pc.isAlive) {
+            angle = Math.PI; // Dead fish
+        }
         phys.body.getTransform().setRotation(angle);
     }
 }
