@@ -109,7 +109,7 @@ public class PhysicsSystem extends BaseEntitySystem {
                 if(rc.enabled) {
                     rc.enabled = false;
 
-                    playerCc.color = sw.color;
+                    playerCc.color = GameColor.random(playerCc.color);
                 }
             }
 

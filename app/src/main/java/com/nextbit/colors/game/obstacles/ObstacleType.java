@@ -44,16 +44,14 @@ public enum ObstacleType {
                 break;
 
             case CIRCLE_2X_PHONE:
-                ids.add(Entities.createSwitch(world, y + BIG_RADIUS + SPACING));
+                ids.add(Entities.createPhone(world, y + BIG_RADIUS));
                 ids.addAll(CIRCLE_2X.create(world, y, difficulty));
                 break;
             case CIRCLE_2X:
                 double radius = BIG_RADIUS;
                 double speed = CIRCLE_SPEED * difficulty;
                 final GameColor startColor = GameColor.random();
-                final double circleY = y + BIG_RADIUS + SPACING;
-
-                ids.add(Entities.createSwitch(world, y, startColor));
+                final double circleY = y + BIG_RADIUS;
 
                 for(int i = 0; i < 2; i++) {
                     ids.addAll(Entities.createRing(world, startColor, speed,
@@ -70,7 +68,7 @@ public enum ObstacleType {
     public double height() {
         switch(this) {
             case CIRCLE_2X:
-                return BIG_RADIUS * 2 + SPACING;
+            case CIRCLE_2X_PHONE:
             case CIRCLE_EMPTY:
             case CIRCLE_SWITCH:
             case CIRCLE_PHONE:

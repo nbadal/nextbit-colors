@@ -189,11 +189,12 @@ public enum Entities {
                                           double x, double y, double innerRad, double outerRad) {
         HashSet<Integer> ids = new HashSet<>();
         int color = startColor.ordinal();
+        int speedSig = (int) Math.signum(speed);
         for(int i = 0; i < 4; i++) {
             final int id = Entities.createRingSegment(world, GameColor.values[color], speed, x, y,
                     innerRad, outerRad, (float) (Math.PI / 2), (float) (Math.PI * (0.5*i - 0.75)));
             ids.add(id);
-            color = (color + 1) % 4;
+            color = (color + speedSig + 4) % 4;
         }
         return ids;
     }
@@ -212,8 +213,6 @@ public enum Entities {
         BodyFixture bf = pc.body.addFixture(Geometry.createCircle(SwitchComponent.RADIUS));
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_SWITCH, PhysicsSystem.CAT_PLAYER));
-
-        ComponentMapper.getFor(SwitchComponent.class, world).get(id).color = color;
 
         world.getSystem(PhysicsSystem.class).addBody(pc.body);
 
