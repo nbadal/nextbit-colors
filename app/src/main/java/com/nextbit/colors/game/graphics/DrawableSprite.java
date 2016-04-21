@@ -36,6 +36,8 @@ public class DrawableSprite extends Sprite {
         mDrawable.setBounds(l, t, l+w, t+h);
         if(color != null) {
             mDrawable.setColorFilter(color.filter);
+        } else {
+            mDrawable.setColorFilter(null);
         }
         mDrawable.draw(canvas);
         canvas.restore();

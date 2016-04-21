@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class RenderingSystem extends BaseEntitySystem {
+public class EntityRenderSystem extends BaseEntitySystem {
     public static final Paint DEBUG_PAINT = new Paint() {{
         setColor(Color.RED);
         setTextSize(100);
@@ -40,7 +40,7 @@ public class RenderingSystem extends BaseEntitySystem {
 
     private ArrayList<Integer> renderQueue = new ArrayList<>();
 
-    public RenderingSystem() {
+    public EntityRenderSystem() {
         super(Aspect.all(RenderComponent.class).one(PhysicsComponent.class, UIComponent.class));
     }
 

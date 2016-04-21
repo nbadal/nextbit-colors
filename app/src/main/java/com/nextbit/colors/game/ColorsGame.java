@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.nextbit.colors.game.graphics.Assets;
+import com.nextbit.colors.game.systems.BackgroundRenderSystem;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
 import com.nextbit.colors.game.systems.CullingSystem;
 import com.nextbit.colors.game.systems.LavaSystem;
@@ -15,7 +16,7 @@ import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.systems.PlayerScoreSystem;
 import com.nextbit.colors.game.systems.PlayerTapSystem;
 import com.nextbit.colors.game.systems.PlayerRespawnSystem;
-import com.nextbit.colors.game.systems.RenderingSystem;
+import com.nextbit.colors.game.systems.EntityRenderSystem;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -39,7 +40,8 @@ public class ColorsGame {
                     new PlayerRespawnSystem(),
                     new LavaSystem(),
                     new PlayerDeathSystem(),
-                    new RenderingSystem()
+                    new BackgroundRenderSystem(),
+                    new EntityRenderSystem()
             )
             .build();
     private final World world = new World(config);
@@ -53,8 +55,8 @@ public class ColorsGame {
 
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
-        Entities.createStartText(world);
         Entities.createScore(world);
+        Entities.createSwitch(world, 4);
     }
 
     public void setSize(int widthPx, int heightPx) {

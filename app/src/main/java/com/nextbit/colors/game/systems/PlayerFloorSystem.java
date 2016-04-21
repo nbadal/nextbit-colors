@@ -8,7 +8,7 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 
 public class PlayerFloorSystem extends IteratingSystem {
 
-    public static final double FLOOR_POS = 3.0;
+    public static final double FLOOR_POS = 2.0;
 
     private ComponentMapper<PhysicsComponent> transformM;
 

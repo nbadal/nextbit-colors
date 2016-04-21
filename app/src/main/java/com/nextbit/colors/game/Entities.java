@@ -13,15 +13,14 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.components.ScoreComponent;
-import com.nextbit.colors.game.components.StartComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.components.UIComponent;
 import com.nextbit.colors.game.graphics.Assets;
+import com.nextbit.colors.game.graphics.RingSegmentSprite;
 import com.nextbit.colors.game.graphics.SwitchSprite;
 import com.nextbit.colors.game.graphics.TextSprite;
 import com.nextbit.colors.game.obstacles.ObstacleGeometry;
 import com.nextbit.colors.game.obstacles.RingSegment;
-import com.nextbit.colors.game.graphics.RingSegmentSprite;
 import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.util.EntityBody;
@@ -40,7 +39,6 @@ import java.util.Set;
 public enum Entities {
     CAMERA,
     PLAYER,
-    START_TEXT,
     SCORE,
     GAME_OVER,
     RING_SEGMENT,
@@ -72,12 +70,6 @@ public enum Entities {
             case CAMERA:
                 return new ArchetypeBuilder()
                         .add(CameraFollowComponent.class)
-                        .build(world);
-            case START_TEXT:
-                return new ArchetypeBuilder()
-                        .add(UIComponent.class,
-                                StartComponent.class,
-                                RenderComponent.class)
                         .build(world);
             case SCORE:
                 return new ArchetypeBuilder()
@@ -119,7 +111,8 @@ public enum Entities {
         int id = PLAYER.create(world);
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = Assets.sheep;
 
-        ComponentMapper.getFor(ColorComponent.class, world).get(id).color = GameColor.random();
+        // Start white
+        ComponentMapper.getFor(ColorComponent.class, world).get(id).color = null;
 
         Body playerBody = new EntityBody(id);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
@@ -158,17 +151,6 @@ public enum Entities {
         ui.position.y = PlayerFloorSystem.FLOOR_POS / 2;
 
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite("00");
-        return id;
-    }
-
-    public static int createStartText(World world) {
-        int id = START_TEXT.create(world);
-        UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
-        ui.isWorldPosition = true;
-        ui.position.y = PlayerFloorSystem.FLOOR_POS / 2;
-
-        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite =
-                new TextSprite("TAP TO JUMP");
         return id;
     }
 

@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 
 public class Assets {
-    public static final int TEXT_COLOR = 0xff838383;
+    public static final int TEXT_COLOR = 0xff222222;
     public static final int TEXT_SIZE_PX = 68;
 
     public static double pxToMeters;

@@ -34,7 +34,7 @@ public class GameLoopThread extends Thread {
                     synchronized (view.getHolder()) {
 
                         Input.preUpdate();
-                        canvas.drawColor(Color.WHITE);
+                        canvas.drawColor(Color.MAGENTA);
 
                         long now = System.currentTimeMillis();
 

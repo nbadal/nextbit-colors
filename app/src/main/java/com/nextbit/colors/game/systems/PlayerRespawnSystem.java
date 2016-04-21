@@ -45,7 +45,7 @@ public class PlayerRespawnSystem extends IteratingSystem {
         transform.body.setLinearVelocity(0, 0);
 
         // New Color
-        color.color = GameColor.random(color.color);
+        color.color = null;
 
 
         AspectSubscriptionManager manager = getWorld().getAspectSubscriptionManager();
@@ -60,9 +60,6 @@ public class PlayerRespawnSystem extends IteratingSystem {
         // Respawn all stars
 
         // Remove Death Particles
-
-        // Show Start
-        Entities.createStartText(getWorld());
 
         // Hide Game Over
         IntBag gameOvers = getWorld().getAspectSubscriptionManager().get(
