@@ -15,7 +15,7 @@ public class PlayerComponent extends Component {
 
     public boolean isAlive = true;
     public boolean deathHandled;
-    public boolean respawnHandled;
+    public boolean respawnHandled = true;
     private long deathTime;
 
     public int score;
