@@ -1,7 +1,6 @@
 package com.nextbit.colors.game.components;
 
 import com.artemis.Component;
-import com.nextbit.colors.game.GameColor;
 import com.nextbit.colors.game.util.GravityMath;
 
 public class PlayerComponent extends Component {

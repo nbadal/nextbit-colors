@@ -2,8 +2,8 @@ package com.nextbit.colors.app;
 
 import com.nextbit.colors.R;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
     private GameView mGameView;

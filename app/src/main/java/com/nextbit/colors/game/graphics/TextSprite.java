@@ -3,8 +3,6 @@ package com.nextbit.colors.game.graphics;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.GameColor;
 
-import org.w3c.dom.Text;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;

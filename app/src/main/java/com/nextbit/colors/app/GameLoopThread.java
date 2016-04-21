@@ -6,7 +6,6 @@ import com.nextbit.colors.game.Input;
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 
 public class GameLoopThread extends Thread {
     final private Object mPauseLock = new Object();

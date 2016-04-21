@@ -4,8 +4,8 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.nextbit.colors.game.Camera;
-import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
+import com.nextbit.colors.game.components.PlayerComponent;
 
 public class LavaSystem extends IteratingSystem {
 

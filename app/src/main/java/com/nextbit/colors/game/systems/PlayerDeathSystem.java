@@ -3,12 +3,11 @@ package com.nextbit.colors.game.systems;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
-import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.Entities;
 import com.nextbit.colors.game.components.ColorComponent;
+import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
-import com.nextbit.colors.game.components.PhysicsComponent;
 
 public class PlayerDeathSystem extends IteratingSystem {
 

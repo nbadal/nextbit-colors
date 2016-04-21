@@ -6,13 +6,11 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.Camera;
-import com.nextbit.colors.game.Entities;
-import com.nextbit.colors.game.GameColor;
 import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.GameOverComponent;
+import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
-import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
 
 public class PlayerRespawnSystem extends IteratingSystem {

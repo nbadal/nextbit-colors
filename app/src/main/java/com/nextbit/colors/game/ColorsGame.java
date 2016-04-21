@@ -7,16 +7,16 @@ import com.nextbit.colors.game.graphics.Assets;
 import com.nextbit.colors.game.systems.BackgroundRenderSystem;
 import com.nextbit.colors.game.systems.CameraFollowSystem;
 import com.nextbit.colors.game.systems.CullingSystem;
+import com.nextbit.colors.game.systems.EntityRenderSystem;
 import com.nextbit.colors.game.systems.LavaSystem;
 import com.nextbit.colors.game.systems.LevelGeneratorSystem;
 import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.systems.PlayerAnimationSystem;
 import com.nextbit.colors.game.systems.PlayerDeathSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
+import com.nextbit.colors.game.systems.PlayerRespawnSystem;
 import com.nextbit.colors.game.systems.PlayerScoreSystem;
 import com.nextbit.colors.game.systems.PlayerTapSystem;
-import com.nextbit.colors.game.systems.PlayerRespawnSystem;
-import com.nextbit.colors.game.systems.EntityRenderSystem;
 
 import android.content.Context;
 import android.graphics.Canvas;

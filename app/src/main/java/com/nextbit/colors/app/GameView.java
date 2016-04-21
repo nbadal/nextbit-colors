@@ -1,16 +1,12 @@
 package com.nextbit.colors.app;
 
-import com.nextbit.colors.game.ColorsGame;
 import com.nextbit.colors.game.Input;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 public class GameView extends SurfaceView {
     private final SurfaceHolder holder;

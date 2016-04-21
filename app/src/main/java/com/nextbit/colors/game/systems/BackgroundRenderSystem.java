@@ -6,7 +6,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.ColorsGame;
-import com.nextbit.colors.game.components.PhoneComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.graphics.Assets;
@@ -16,7 +15,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 
 public class BackgroundRenderSystem extends BaseSystem {

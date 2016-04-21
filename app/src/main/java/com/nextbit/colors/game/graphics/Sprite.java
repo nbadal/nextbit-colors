@@ -1,7 +1,6 @@
 package com.nextbit.colors.game.graphics;
 
 import com.nextbit.colors.game.GameColor;
-import com.nextbit.colors.game.components.PhysicsComponent;
 
 import android.graphics.Canvas;
 

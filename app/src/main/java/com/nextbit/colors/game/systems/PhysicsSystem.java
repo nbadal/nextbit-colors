@@ -10,7 +10,6 @@ import com.nextbit.colors.game.components.PhoneComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
-import com.nextbit.colors.game.components.ScoreComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.util.EntityBody;
 import com.nextbit.colors.game.util.GravityMath;

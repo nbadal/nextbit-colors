@@ -1,7 +1,6 @@
 package com.nextbit.colors.game.obstacles;
 
 import com.artemis.World;
-import com.nextbit.colors.game.ColorsGame;
 import com.nextbit.colors.game.Entities;
 import com.nextbit.colors.game.GameColor;
 import com.nextbit.colors.game.util.GravityMath;
