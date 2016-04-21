@@ -116,7 +116,7 @@ public enum Entities {
 
         Body playerBody = new EntityBody(id);
         playerBody.setMass(new Mass(new Vector2(), 1d, 0d));
-        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE * 0.75));
+        BodyFixture bf = playerBody.addFixture(Geometry.createCircle(PlayerComponent.SIZE * 0.5));
         bf.setSensor(true);
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PLAYER,
                 PhysicsSystem.CAT_OBSTACLE | PhysicsSystem.CAT_SWITCH | PhysicsSystem.CAT_PHONE));

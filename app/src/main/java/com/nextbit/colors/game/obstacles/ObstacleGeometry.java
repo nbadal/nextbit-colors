@@ -11,7 +11,7 @@ import org.dyn4j.geometry.Vector2;
 
 public class ObstacleGeometry {
 
-    private static final int RING_SUBDIVS = 16;
+    private static final int RING_SUBDIVS = 8;
 
     /** Create a ring made of polygonal segments */
     public static Body createRingSegment(int entityId, RingSegment info) {
