@@ -36,6 +36,6 @@ public class PlayerDeathSystem extends IteratingSystem {
         // Spawn Death Particles
 
         // Spawn Game Over
-        Entities.createGameOver(getWorld(), Camera.y + Camera.heightMeters/2);
+        Entities.createGameOver(getWorld());
     }
 }

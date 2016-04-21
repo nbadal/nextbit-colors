@@ -136,14 +136,15 @@ public enum Entities {
         return id;
     }
 
-    public static int createGameOver(World world, double y) {
+    public static int createGameOver(World world) {
         int id = GAME_OVER.create(world);
         UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
-        ui.isWorldPosition = true;
-        ui.position.y = y;
+        ui.isWorldPosition = false;
+        ui.position.x = Camera.widthMeters / 2;
+        ui.position.y = Camera.heightMeters / 2;
 
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite
-                ("GAME OVER");
+                ("GAME OVER", true);
         return id;
     }
 

@@ -1,6 +1,9 @@
 package com.nextbit.colors.game.graphics;
 
+import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.GameColor;
+
+import org.w3c.dom.Text;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +13,7 @@ import android.graphics.RectF;
 
 public class TextSprite extends Sprite {
     public String text;
+    private final boolean fullWidthBg;
 
     private static final int PADDING = 10;
     private static final Rect sTempRect = new Rect();
@@ -20,7 +24,12 @@ public class TextSprite extends Sprite {
     }
 
     public TextSprite(String text) {
+        this(text, false);
+    }
+
+    public TextSprite(String text, boolean fullWidthBg) {
         this.text = text;
+        this.fullWidthBg = fullWidthBg;
     }
 
     @Override
@@ -33,6 +42,9 @@ public class TextSprite extends Sprite {
         sTempRectF.set(sTempRect);
         sTempRectF.inset(-PADDING, -PADDING);
         sTempRectF.offset(0, Assets.TEXT_SIZE_PX/2);
+        if(fullWidthBg) {
+            sTempRectF.inset((float) (-Camera.widthMeters * Assets.metersToPx), 0);
+        }
 
         canvas.drawRoundRect(sTempRectF, PADDING, PADDING, sBgPaint);
 
