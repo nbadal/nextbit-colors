@@ -16,6 +16,8 @@ public enum ObstacleType {
     CIRCLE_PHONE,
     CIRCLE_2X,
     CIRCLE_2X_PHONE,
+    JUST_SWITCH,
+    JUST_PHONE,
     ;
 
     // TODO: make these mean something
@@ -92,6 +94,12 @@ public enum ObstacleType {
                         SMALL_RADIUS, circleY, radius - RING_WIDTH, radius));
                 break;
             }
+            case JUST_PHONE:
+                ids.add(Entities.createPhone(world, y + SPACING / 2));
+                break;
+            case JUST_SWITCH:
+                ids.add(Entities.createSwitch(world, y + SPACING / 2));
+                break;
         }
 
         return ids;
@@ -107,6 +115,9 @@ public enum ObstacleType {
                 return BIG_RADIUS * 2;
             case TOUCHING_CIRCLES:
                 return SMALL_RADIUS * 2;
+            case JUST_SWITCH:
+            case JUST_PHONE:
+                return SPACING;
             default:
                 throw new IllegalArgumentException("Missing heightMeters for "+this);
         }
