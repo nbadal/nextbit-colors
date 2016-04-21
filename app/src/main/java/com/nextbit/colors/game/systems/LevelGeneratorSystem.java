@@ -3,6 +3,7 @@ package com.nextbit.colors.game.systems;
 import com.artemis.Aspect;
 import com.artemis.systems.IteratingSystem;
 import com.nextbit.colors.game.Camera;
+import com.nextbit.colors.game.ColorsGame;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.obstacles.ObstacleType;
@@ -17,10 +18,18 @@ public class LevelGeneratorSystem extends IteratingSystem {
 
     private static final double GENERATE_BEGIN = 16;
 
+    private ArrayList<ObstacleType> obstacleOrder = new ArrayList<>();
+
     private ArrayList<ObstacleSet> obstacles = new ArrayList<>();
 
     public LevelGeneratorSystem() {
         super(Aspect.all(PlayerComponent.class, PhysicsComponent.class));
+
+        // Consistent beginning of generation.
+        obstacleOrder.add(ObstacleType.CIRCLE_PHONE);
+        obstacleOrder.add(ObstacleType.JUST_SWITCH);
+        obstacleOrder.add(ObstacleType.CIRCLE_EMPTY);
+        obstacleOrder.add(ObstacleType.CIRCLE_2X_PHONE);
     }
 
     @Override
@@ -60,8 +69,15 @@ public class LevelGeneratorSystem extends IteratingSystem {
     }
 
     private ObstacleType getTypeForPosition(int position) {
-        // TODO cache calculated types in a lookup
-        return ObstacleType.values()[position % ObstacleType.values().length];
+        for(int i = obstacleOrder.size(); i <= position; i++) {
+            if(i % 3 == 0) {
+                obstacleOrder.add(ObstacleType.JUST_PHONE);
+            } else {
+                obstacleOrder.add(ObstacleType.values()[
+                        ColorsGame.random.nextInt(ObstacleType.values().length)]);
+            }
+        }
+        return obstacleOrder.get(position);
     }
 
     /** Generate up to upToY, starting with existing set or from beginning of generation */

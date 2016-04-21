@@ -49,8 +49,10 @@ public class BackgroundRenderSystem extends BaseSystem {
         c.translate(0, (float) Camera.y * Assets.metersToPx);
         c.scale(1f, -1f);
 
+        // Sky Color
         c.drawColor(COLOR_SKY); // Maybe fade this to black as we get very high?
 
+        // Skyline
         for(int i = 0; i < mSkylines.size(); i++) {
             Skyline skyline = mSkylines.get(i);
             sPaint.setColor(skyline.color);
@@ -67,11 +69,13 @@ public class BackgroundRenderSystem extends BaseSystem {
 
         float cameraWidthPx = (float) (Camera.widthMeters * Assets.metersToPx);
 
+        // Hill
         float hillHeightPx = (float) ((PlayerFloorSystem.FLOOR_POS + 0.5) * Assets.metersToPx);
         sPaint.setColor(COLOR_GROUND);
         sTempRect.set(-30, -hillHeightPx, cameraWidthPx + 30, hillHeightPx);
         c.drawOval(sTempRect, sPaint);
 
+        // Shadow
         IntBag players = getWorld().getAspectSubscriptionManager().get(
                 Aspect.all(PlayerComponent.class, PhysicsComponent.class)).getEntities();
         if(!players.isEmpty()) {
