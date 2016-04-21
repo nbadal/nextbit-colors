@@ -29,7 +29,6 @@ public class Assets {
 
         textPaint = new Paint();
         textPaint.setColor(TEXT_COLOR);
-        textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(TEXT_SIZE_PX);
         textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
     }
