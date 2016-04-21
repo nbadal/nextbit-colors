@@ -10,6 +10,7 @@ import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.RenderComponent;
 import com.nextbit.colors.game.components.UIComponent;
 import com.nextbit.colors.game.graphics.Assets;
+import com.nextbit.colors.game.graphics.TwoSideSprite;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -89,7 +90,12 @@ public class EntityRenderSystem extends BaseEntitySystem {
             c.translate((float) worldX * Assets.metersToPx, (float) -worldY * Assets.metersToPx);
             c.rotate((float) -Math.toDegrees(rotation));
             if(render.zRotate) {
-                c.scale(zRotation, 1f);
+                if(render.sprite instanceof TwoSideSprite) {
+                    ((TwoSideSprite) render.sprite).setFront(zRotation > 0);
+                    c.scale(Math.abs(zRotation), 1f);
+                } else {
+                    c.scale(zRotation, 1f);
+                }
             }
 
             render.sprite.render(c, color);

@@ -16,7 +16,7 @@ public class Assets {
 
     public static Paint textPaint;
     public static DrawableSprite sheep;
-    public static DrawableSprite phone;
+    public static Sprite phone;
 
     public static void load(Context context) {
         final Resources res = context.getResources();
@@ -25,7 +25,8 @@ public class Assets {
         metersToPx = sheep.getHeightPx();
         pxToMeters = 1.0 / metersToPx;
 
-        phone = new DrawableSprite(res.getDrawable(R.drawable.phone));
+        phone = new TwoSideSprite(new DrawableSprite(res.getDrawable(R.drawable.phone)),
+                new DrawableSprite(res.getDrawable(R.drawable.phone_back)));
 
         textPaint = new Paint();
         textPaint.setColor(TEXT_COLOR);
