@@ -25,6 +25,8 @@ public class EntityRenderSystem extends BaseEntitySystem {
         setTextSize(100);
     }};
 
+    private float zRotation = 1f;
+
     private ComponentMapper<RenderComponent> renderM;
     private ComponentMapper<PhysicsComponent> transformM;
     private ComponentMapper<UIComponent> uiM;
@@ -50,6 +52,9 @@ public class EntityRenderSystem extends BaseEntitySystem {
         if(c == null) {
             return;
         }
+
+        zRotation = (float) Math.cos(2 * Math.PI * (System.currentTimeMillis() % 2000) / 2000.);
+
         c.save();
         // Offset for camera, Y at bottom of screen
         c.translate(0, (float) Camera.heightMeters * Assets.metersToPx);
@@ -83,6 +88,9 @@ public class EntityRenderSystem extends BaseEntitySystem {
             c.save();
             c.translate((float) worldX * Assets.metersToPx, (float) -worldY * Assets.metersToPx);
             c.rotate((float) -Math.toDegrees(rotation));
+            if(render.zRotate) {
+                c.scale(zRotation, 1f);
+            }
 
             render.sprite.render(c, color);
 

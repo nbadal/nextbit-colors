@@ -204,7 +204,9 @@ public enum Entities {
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_SWITCH, PhysicsSystem.CAT_PLAYER));
         world.getSystem(PhysicsSystem.class).addBody(pc.body);
 
-        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new SwitchSprite();
+        RenderComponent render = ComponentMapper.getFor(RenderComponent.class, world).get(id);
+        render.zRotate = true;
+        render.sprite = new SwitchSprite();
         return id;
     }
 
@@ -219,7 +221,9 @@ public enum Entities {
         bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_PHONE, PhysicsSystem.CAT_PLAYER));
         world.getSystem(PhysicsSystem.class).addBody(pc.body);
 
-        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = Assets.phone;
+        RenderComponent render = ComponentMapper.getFor(RenderComponent.class, world).get(id);
+        render.zRotate = true;
+        render.sprite = Assets.phone;
         return id;
     }
 }

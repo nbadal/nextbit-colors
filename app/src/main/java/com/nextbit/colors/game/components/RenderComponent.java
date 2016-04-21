@@ -7,4 +7,5 @@ public class RenderComponent extends Component {
     public boolean enabled = true;
     public boolean onScreen = true;
     public Sprite sprite;
+    public boolean zRotate;
 }
