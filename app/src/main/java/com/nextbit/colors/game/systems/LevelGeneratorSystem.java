@@ -60,6 +60,7 @@ public class LevelGeneratorSystem extends IteratingSystem {
     }
 
     private ObstacleType getTypeForPosition(int position) {
+        // TODO cache calculated types in a lookup
         return ObstacleType.values()[position % ObstacleType.values().length];
     }
 

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum ObstacleType {
+    PIN_WHEEL,
     TOUCHING_CIRCLES,
     CIRCLE_EMPTY,
     CIRCLE_SWITCH,
@@ -35,6 +36,9 @@ public enum ObstacleType {
     public static final double BIG_RADIUS = 4.0;
     public static final double SMALL_RADIUS = 3;
 
+    public static final double PIN_RADIUS = BIG_RADIUS;
+    public static final double PIN_WIDTH = RING_WIDTH;
+
     public Set<Integer> create(World world, double y, double difficulty) {
         HashSet<Integer> ids = new HashSet<>();
 
@@ -48,7 +52,7 @@ public enum ObstacleType {
                 ids.add(Entities.createPhone(world, y + BIG_RADIUS));
                 break;
             case CIRCLE_EMPTY:
-                ids.addAll(Entities.createRing(world, CIRCLE_SPEED * difficulty,
+                ids.addAll(Entities.createRing(world, CIRCLE_SPEED,
                         0, y + BIG_RADIUS, BIG_RADIUS - RING_WIDTH, BIG_RADIUS));
                 break;
 
@@ -58,7 +62,7 @@ public enum ObstacleType {
                 break;
             case CIRCLE_2X: {
                 double radius = BIG_RADIUS;
-                double speed = CIRCLE_SPEED * difficulty;
+                double speed = CIRCLE_SPEED;
                 final GameColor startColor = GameColor.random();
                 final double circleY = y + BIG_RADIUS;
 
@@ -94,6 +98,11 @@ public enum ObstacleType {
                         SMALL_RADIUS, circleY, radius - RING_WIDTH, radius));
                 break;
             }
+            case PIN_WHEEL:
+                ids.addAll(Entities.createPinwheel(world, CIRCLE_SPEED, GameColor.random(),
+                        -PIN_RADIUS / 2, y + PIN_RADIUS, PIN_WIDTH, PIN_RADIUS));
+                break;
+
             case JUST_PHONE:
                 ids.add(Entities.createPhone(world, y + SPACING / 2));
                 break;
@@ -118,6 +127,8 @@ public enum ObstacleType {
             case JUST_SWITCH:
             case JUST_PHONE:
                 return SPACING;
+            case PIN_WHEEL:
+                return PIN_RADIUS * 2;
             default:
                 throw new IllegalArgumentException("Missing heightMeters for "+this);
         }

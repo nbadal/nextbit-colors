@@ -6,6 +6,7 @@ import com.nextbit.colors.game.util.EntityBody;
 import org.dyn4j.collision.CategoryFilter;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.Polygon;
 import org.dyn4j.geometry.Vector2;
 
@@ -30,6 +31,21 @@ public class ObstacleGeometry {
             bf.setSensor(true);
             bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_OBSTACLE, PhysicsSystem.CAT_PLAYER));
         }
+        return body;
+    }
+
+    public static Body createPinArm(int entityId, PinArm info) {
+        double halfThickness = info.thickness / 2;
+        Body body = new EntityBody(entityId, 1);
+
+        Vector2 tl = new Vector2(0, halfThickness);
+        Vector2 bl = new Vector2(0, -halfThickness);
+        Vector2 tr = new Vector2(info.length, halfThickness);
+        Vector2 br = new Vector2(info.length, -halfThickness);
+
+        BodyFixture bf = body.addFixture(new Polygon(tl, bl, br, tr));
+        bf.setSensor(true);
+        bf.setFilter(new CategoryFilter(PhysicsSystem.CAT_OBSTACLE, PhysicsSystem.CAT_PLAYER));
         return body;
     }
 

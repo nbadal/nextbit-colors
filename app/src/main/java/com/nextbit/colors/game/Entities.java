@@ -16,10 +16,12 @@ import com.nextbit.colors.game.components.ScoreComponent;
 import com.nextbit.colors.game.components.SwitchComponent;
 import com.nextbit.colors.game.components.UIComponent;
 import com.nextbit.colors.game.graphics.Assets;
+import com.nextbit.colors.game.graphics.PinArmSprite;
 import com.nextbit.colors.game.graphics.RingSegmentSprite;
 import com.nextbit.colors.game.graphics.SwitchSprite;
 import com.nextbit.colors.game.graphics.TextSprite;
 import com.nextbit.colors.game.obstacles.ObstacleGeometry;
+import com.nextbit.colors.game.obstacles.PinArm;
 import com.nextbit.colors.game.obstacles.RingSegment;
 import com.nextbit.colors.game.systems.PhysicsSystem;
 import com.nextbit.colors.game.systems.PlayerFloorSystem;
@@ -32,6 +34,7 @@ import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,6 +45,7 @@ public enum Entities {
     SCORE,
     GAME_OVER,
     RING_SEGMENT,
+    PIN_ARM,
     COLOR_SWITCH,
     PHONE,
     ;
@@ -188,13 +192,12 @@ public enum Entities {
     public static Set<Integer> createRing(World world, GameColor startColor, double speed,
                                           double x, double y, double innerRad, double outerRad) {
         HashSet<Integer> ids = new HashSet<>();
-        int color = startColor.ordinal();
         int speedSig = (int) Math.signum(speed);
         for(int i = 0; i < 4; i++) {
-            final int id = Entities.createRingSegment(world, GameColor.values[color], speed, x, y,
+            final int id = Entities.createRingSegment(world, startColor, speed, x, y,
                     innerRad, outerRad, (float) (Math.PI / 2), (float) (Math.PI * (0.5*i - 0.75)));
             ids.add(id);
-            color = (color + speedSig + 4) % 4;
+            startColor = startColor.offset(speedSig);
         }
         return ids;
     }
@@ -236,6 +239,44 @@ public enum Entities {
         RenderComponent render = ComponentMapper.getFor(RenderComponent.class, world).get(id);
         render.zRotate = true;
         render.sprite = Assets.phone;
+        return id;
+    }
+
+    public static Set<Integer> createPinwheel(World world, double speed, GameColor startColor,
+                                          double x, double y, double thickness, double pinRadius) {
+        HashSet<Integer> ids = new HashSet<>();
+
+        int speedSig = (int) Math.signum(speed);
+
+        for(int i = 0; i < 4; i++) {
+            ids.add(createPinArm(world, speed, startColor, i, x, y, thickness, pinRadius));
+            startColor = startColor.offset(speedSig);
+        }
+
+        return ids;
+    }
+
+    private static int createPinArm(World world, double speed, GameColor color, int position,
+                                    double x, double y, double thickness, double length) {
+        int id = RING_SEGMENT.create(world);
+
+        PinArm arm = new PinArm();
+        arm.length = length;
+        arm.thickness = thickness;
+
+        ComponentMapper.getFor(ColorComponent.class, world).get(id).color = color;
+
+        PinArmSprite armSprite = new PinArmSprite();
+        armSprite.info = arm;
+        ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = armSprite;
+
+        PhysicsComponent phys = ComponentMapper.getFor(PhysicsComponent.class, world).get(id);
+        phys.body = ObstacleGeometry.createPinArm(id, arm);
+        phys.body.rotate(position * Math.PI / 2);
+        phys.body.translate(x, y);
+        phys.body.setAngularVelocity(speed);
+        world.getSystem(PhysicsSystem.class).addBody(phys.body);
+
         return id;
     }
 }
