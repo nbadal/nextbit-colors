@@ -6,11 +6,15 @@ import com.nextbit.colors.game.Input;
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 
 public class GameLoopThread extends Thread {
     final private Object mPauseLock = new Object();
     private GameView view;
-    private boolean mPaused;
+
+    private boolean mActivityPaused;
+    private boolean mHasSurface;
+
     private ColorsGame game;
     private long mLastUpdate;
 
@@ -46,7 +50,7 @@ public class GameLoopThread extends Thread {
             }
 
             synchronized (mPauseLock) {
-                while (mPaused) {
+                while (mActivityPaused || !mHasSurface) {
                     try {
                         mPauseLock.wait();
                     } catch (InterruptedException e) {
@@ -58,15 +62,36 @@ public class GameLoopThread extends Thread {
 
     public void onPause() {
         synchronized (mPauseLock) {
-            mPaused = true;
+            mActivityPaused = true;
+        }
+    }
+
+    public void onSurfaceDestroyed() {
+        synchronized (mPauseLock) {
+            mHasSurface = false;
+        }
+    }
+
+    public void onSurfaceCreated() {
+        synchronized (mPauseLock) {
+            mHasSurface = true;
+            if(!mActivityPaused) {
+                unpause();
+            }
         }
     }
 
     public void onResume() {
         synchronized (mPauseLock) {
-            mPaused = false;
-            mPauseLock.notifyAll();
+            mActivityPaused = false;
+            if(mHasSurface) {
+                unpause();
+            }
         }
+    }
+
+    private void unpause() {
+        mPauseLock.notifyAll();
     }
 
     public void setSize(int w, int h) {

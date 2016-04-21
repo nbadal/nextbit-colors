@@ -37,9 +37,8 @@ public class GameView extends SurfaceView {
                 if(!mRunning) {
                     gameLoopThread.start();
                     mRunning = true;
-                } else {
-                    gameLoopThread.onResume();
                 }
+                gameLoopThread.onSurfaceCreated();
             }
 
             @Override
@@ -48,6 +47,7 @@ public class GameView extends SurfaceView {
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
+                gameLoopThread.onSurfaceDestroyed();
             }
         });
     }
@@ -69,5 +69,9 @@ public class GameView extends SurfaceView {
 
     public void onPause() {
         gameLoopThread.onPause();
+    }
+
+    public void onResume() {
+        gameLoopThread.onResume();
     }
 }

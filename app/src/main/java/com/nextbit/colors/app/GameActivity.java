@@ -17,6 +17,13 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        mGameView.onResume();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
