@@ -55,7 +55,10 @@ public class GameLoopThread extends Thread {
             }
 
             synchronized (mPauseLock) {
-                while (mActivityPaused || !mHasSurface) {
+                if(isGamePaused()) {
+                    Log.d(TAG, "Pausing.");
+                }
+                while (isGamePaused()) {
                     try {
                         mPauseLock.wait();
                     } catch (InterruptedException e) {
@@ -65,19 +68,26 @@ public class GameLoopThread extends Thread {
         }
     }
 
+    private boolean isGamePaused() {
+        return mActivityPaused || !mHasSurface;
+    }
+
     public void onPause() {
+        Log.d(TAG, "onPause");
         synchronized (mPauseLock) {
             mActivityPaused = true;
         }
     }
 
     public void onSurfaceDestroyed() {
+        Log.d(TAG, "onSurfaceDestroyed");
         synchronized (mPauseLock) {
             mHasSurface = false;
         }
     }
 
     public void onSurfaceCreated() {
+        Log.d(TAG, "onSurfaceCreated");
         synchronized (mPauseLock) {
             mHasSurface = true;
             if(!mActivityPaused) {
@@ -87,6 +97,7 @@ public class GameLoopThread extends Thread {
     }
 
     public void onResume() {
+        Log.d(TAG, "onResume");
         synchronized (mPauseLock) {
             mActivityPaused = false;
             if(mHasSurface) {
@@ -96,6 +107,7 @@ public class GameLoopThread extends Thread {
     }
 
     private void unpause() {
+        Log.d(TAG, "Un-pausing.");
         mPauseLock.notifyAll();
     }
 

@@ -72,8 +72,6 @@ public class ColorsGame {
     }
 
     public void update(Canvas canvas, long deltaMillis) {
-        if (deltaMillis > 100) deltaMillis = 100;
-
         Camera.canvas = canvas;
 
         world.setDelta(deltaMillis / 1000f);
