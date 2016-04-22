@@ -34,6 +34,8 @@ import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.Vector2;
 
+import android.annotation.SuppressLint;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -134,7 +136,8 @@ public enum Entities {
         ComponentMapper.getFor(CameraFollowComponent.class, world).get(id).target = targetId;
         return id;
     }
-
+    
+    @SuppressLint("DefaultLocale")
     public static int createGameOver(World world) {
         int id = GAME_OVER.create(world);
         UIComponent ui = ComponentMapper.getFor(UIComponent.class, world).get(id);
@@ -142,8 +145,9 @@ public enum Entities {
         ui.position.x = Camera.widthMeters / 2;
         ui.position.y = Camera.heightMeters / 2;
 
+        final String message = String.format("GAME OVER! HIGHSCORE: %d", ColorsGame.highScore);
         ComponentMapper.getFor(RenderComponent.class, world).get(id).sprite = new TextSprite
-                ("GAME OVER", true);
+                (message, true);
         return id;
     }
 

@@ -24,7 +24,9 @@ import android.graphics.Canvas;
 
 import java.util.Random;
 
-public class ColorsGame {
+public class ColorsGame implements ScoreListener {
+
+    public static int highScore;
 
     public static final Random random = new Random(System.currentTimeMillis());
 
@@ -33,7 +35,7 @@ public class ColorsGame {
                     new PlayerTapSystem(),
                     new PlayerAnimationSystem(),
                     new PhysicsSystem(),
-                    new PlayerScoreSystem(),
+                    new PlayerScoreSystem(this),
                     new CullingSystem(),
                     new PlayerFloorSystem(),
                     new CameraFollowSystem(),
@@ -48,6 +50,7 @@ public class ColorsGame {
     private final World world = new World(config);
 
     private Context mContext;
+    private ScoreListener mScoreListener;
 
     public ColorsGame(Context context) {
         mContext = context;
@@ -58,6 +61,17 @@ public class ColorsGame {
         Entities.createCamera(world, player);
         Entities.createScore(world);
         Entities.createSwitch(world, PlayerFloorSystem.FLOOR_POS + GravityMath.JUMP_HEIGHT * 2);
+    }
+
+    public void setScoreListener(ScoreListener listener) {
+        mScoreListener = listener;
+    }
+
+    @Override
+    public void onScoreChanged(int score) {
+        if(mScoreListener != null) {
+            mScoreListener.onScoreChanged(score);
+        }
     }
 
     public void setSize(int widthPx, int heightPx) {
@@ -84,4 +98,5 @@ public class ColorsGame {
     public Context getContext() {
         return mContext;
     }
+
 }

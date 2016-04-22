@@ -2,14 +2,19 @@ package com.nextbit.colors.app;
 
 import com.nextbit.colors.game.ColorsGame;
 import com.nextbit.colors.game.Input;
+import com.nextbit.colors.game.ScoreListener;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 
-public class GameLoopThread extends Thread {
+public class GameLoopThread extends Thread implements ScoreListener {
     private static final String TAG = GameLoopThread.class.getSimpleName();
+    private static final String PREFS = "ColorsGame";
+    private static final String KEY_HIGHSCORE = "highscore";
     final private Object mPauseLock = new Object();
     private GameView view;
 
@@ -22,6 +27,8 @@ public class GameLoopThread extends Thread {
     public GameLoopThread(GameView view) {
         this.view = view;
         game = new ColorsGame(view.getContext());
+        game.setScoreListener(this);
+        ColorsGame.highScore = getHighScore();
     }
 
     @SuppressLint("WrongCall")
@@ -113,5 +120,29 @@ public class GameLoopThread extends Thread {
 
     public void setSize(int w, int h) {
         game.setSize(w, h);
+    }
+
+    @Override
+    public void onScoreChanged(int score) {
+        int previousHigh = getHighScore();
+        if(score > previousHigh) {
+            setHighScore(score);
+        }
+    }
+
+    private int getHighScore() {
+        final SharedPreferences sp = view.getContext().getSharedPreferences(PREFS, Context
+                .MODE_PRIVATE);
+        return sp.getInt(KEY_HIGHSCORE, 0);
+    }
+
+    private void setHighScore(int highScore) {
+        final SharedPreferences sp = view.getContext().getSharedPreferences(PREFS, Context
+                .MODE_PRIVATE);
+        sp.edit()
+                .putInt(KEY_HIGHSCORE, highScore)
+                .apply();
+
+        ColorsGame.highScore = highScore;
     }
 }
