@@ -27,9 +27,12 @@ public class LevelGeneratorSystem extends IteratingSystem {
 
         // Consistent beginning of generation.
         obstacleOrder.add(ObstacleType.CIRCLE_PHONE);
-        obstacleOrder.add(ObstacleType.JUST_SWITCH);
+        obstacleOrder.add(ObstacleType.SPACE_SWITCH);
         obstacleOrder.add(ObstacleType.CIRCLE_EMPTY);
+        obstacleOrder.add(ObstacleType.SPACE);
         obstacleOrder.add(ObstacleType.CIRCLE_2X_PHONE);
+        obstacleOrder.add(ObstacleType.SPACE);
+        obstacleOrder.add(ObstacleType.TOUCHING_CIRCLES);
     }
 
     @Override
@@ -70,14 +73,17 @@ public class LevelGeneratorSystem extends IteratingSystem {
 
     private ObstacleType getTypeForPosition(int position) {
         for(int i = obstacleOrder.size(); i <= position; i++) {
-            if(i % 3 == 0) {
-                obstacleOrder.add(ObstacleType.JUST_PHONE);
+            if(i % 2 == 0) {
+                obstacleOrder.add(randomFrom(ObstacleType.OBSTACLES));
             } else {
-                obstacleOrder.add(ObstacleType.values()[
-                        ColorsGame.random.nextInt(ObstacleType.values().length)]);
+                obstacleOrder.add(randomFrom(ObstacleType.SPACES));
             }
         }
         return obstacleOrder.get(position);
+    }
+
+    private ObstacleType randomFrom(ObstacleType[] list) {
+        return list[ColorsGame.random.nextInt(list.length)];
     }
 
     /** Generate up to upToY, starting with existing set or from beginning of generation */
@@ -87,7 +93,7 @@ public class LevelGeneratorSystem extends IteratingSystem {
 
         if(above != null) {
             position = above.position + 1;
-            y = above.topY + ObstacleType.SPACING;
+            y = above.topY;
         }
 
         while(y < upToY) {
@@ -102,17 +108,12 @@ public class LevelGeneratorSystem extends IteratingSystem {
 
             position++;
             y = set.topY;
-
-            if(y >= upToY) {
-                break;
-            }
-            y += ObstacleType.SPACING;
         }
     }
 
     /** Generate down from existing bottom set */
     private void generateDown(@NonNull ObstacleSet below, double downToY) {
-        double y = below.bottomY - ObstacleType.SPACING;
+        double y = below.bottomY;
         int position = below.position - 1;
 
         while(position >= 0 && y > downToY) {
@@ -127,11 +128,6 @@ public class LevelGeneratorSystem extends IteratingSystem {
 
             position--;
             y = set.bottomY;
-
-            if(y <= downToY) {
-                break;
-            }
-            y -= ObstacleType.SPACING;
         }
     }
 

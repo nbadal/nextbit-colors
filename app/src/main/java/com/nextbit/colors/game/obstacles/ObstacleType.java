@@ -16,18 +16,35 @@ public enum ObstacleType {
     CIRCLE_PHONE,
     CIRCLE_2X,
     CIRCLE_2X_PHONE,
-    JUST_SWITCH,
-    JUST_PHONE,
+
+    SPACE,
+    SPACE_SWITCH,
+    SPACE_PHONE,
     ;
+
+    public static final ObstacleType[] OBSTACLES = {
+            PIN_WHEEL,
+            TOUCHING_CIRCLES,
+            CIRCLE_EMPTY,
+            CIRCLE_SWITCH,
+            CIRCLE_PHONE,
+            CIRCLE_2X,
+            CIRCLE_2X_PHONE,
+    };
+    public static final ObstacleType[] SPACES = {
+            SPACE,
+            SPACE_SWITCH,
+            SPACE_PHONE,
+    };
 
     // TODO: make these mean something
     public static final double DIFFICULTY_MEDIUM = 3.0;
     public static final double DIFFICULTY_HARD = 5.0;
 
-    public static final double SPACING = GravityMath.JUMP_HEIGHT * 3.0;
+    public static final double SPACING = GravityMath.JUMP_HEIGHT * 3;
 
-
-    public static final double CIRCLE_SPEED = Math.PI / 2;
+    public static final double CIRCLE_SPEED = 2.0;
+    public static final double PIN_SPEED = 3.0;
     public static final double TOUCHING_SPEED = CIRCLE_SPEED;
 
     public static final double RING_WIDTH = 0.5;
@@ -98,14 +115,17 @@ public enum ObstacleType {
                 break;
             }
             case PIN_WHEEL:
-                ids.addAll(Entities.createPinwheel(world, CIRCLE_SPEED, GameColor.random(),
+                ids.addAll(Entities.createPinwheel(world, PIN_SPEED, GameColor.random(),
                         -PIN_RADIUS / 2, y + PIN_RADIUS, PIN_WIDTH, PIN_RADIUS));
                 break;
 
-            case JUST_PHONE:
+            case SPACE:
+                // no entities
+                break;
+            case SPACE_PHONE:
                 ids.add(Entities.createPhone(world, y + SPACING / 2));
                 break;
-            case JUST_SWITCH:
+            case SPACE_SWITCH:
                 ids.add(Entities.createSwitch(world, y + SPACING / 2));
                 break;
         }
@@ -123,8 +143,9 @@ public enum ObstacleType {
                 return BIG_RADIUS * 2;
             case TOUCHING_CIRCLES:
                 return SMALL_RADIUS * 2;
-            case JUST_SWITCH:
-            case JUST_PHONE:
+            case SPACE:
+            case SPACE_SWITCH:
+            case SPACE_PHONE:
                 return SPACING;
             case PIN_WHEEL:
                 return PIN_RADIUS * 2;

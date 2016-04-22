@@ -7,6 +7,7 @@ public class PlayerComponent extends Component {
     public static final double SIZE = 1;
     public static final double JUMP_ANIM_LENGTH = (GravityMath.JUMP_TIME * 1000) / 2;
     public static final double JUMP_WIGGLE_RANGE = Math.toRadians(8);
+    public static final int DEATH_FREEZE_MS = 2000;
 
     public int jumpCount;
     public long jumpTime;
@@ -40,6 +41,6 @@ public class PlayerComponent extends Component {
     }
 
     public boolean canRespawn() {
-        return System.currentTimeMillis() - deathTime > 1000;
+        return System.currentTimeMillis() - deathTime > DEATH_FREEZE_MS;
     }
 }
