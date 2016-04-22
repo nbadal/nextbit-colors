@@ -29,8 +29,6 @@ public class PlayerDeathSystem extends IteratingSystem {
         // Lose the magic color
         colorM.get(entityId).color = null;
 
-        // Spawn Death Particles
-
         // Spawn Game Over
         Entities.createGameOver(getWorld());
     }

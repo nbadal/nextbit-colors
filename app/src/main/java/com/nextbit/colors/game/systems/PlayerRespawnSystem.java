@@ -8,6 +8,7 @@ import com.artemis.utils.IntBag;
 import com.nextbit.colors.game.Camera;
 import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.GameOverComponent;
+import com.nextbit.colors.game.components.PhoneComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
@@ -56,8 +57,11 @@ public class PlayerRespawnSystem extends IteratingSystem {
         }
 
         // Respawn all stars
-
-        // Remove Death Particles
+        IntBag phones = manager.get(Aspect.all(PhoneComponent.class)).getEntities();
+        for(int i = 0; i < phones.size(); i++) {
+            int colorSwitch = phones.get(i);
+            renderM.get(colorSwitch).enabled = true;
+        }
 
         // Hide Game Over
         IntBag gameOvers = getWorld().getAspectSubscriptionManager().get(
