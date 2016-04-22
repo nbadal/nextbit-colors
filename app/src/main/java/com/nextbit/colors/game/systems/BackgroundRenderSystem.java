@@ -13,6 +13,7 @@ import com.nextbit.colors.game.graphics.Assets;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class BackgroundRenderSystem extends BaseSystem {
     private static final int COLOR_SKY = 0xff99d9d9;
     private static final Paint sPaint = new Paint();
     private static final RectF sTempRect = new RectF();
+    private static final Path sTempPath = new Path();
     private static final int COLOR_GROUND = 0xff44b425;
     private static final int COLOR_SHADOW = 0x88000000;
     private static final int NUM_SKYLINES = 3;
@@ -29,7 +31,7 @@ public class BackgroundRenderSystem extends BaseSystem {
     private static final int MIN_SKYLINE_BRIGHTNESS = 96;
     private static final int MAX_SKYLINE_BRIGHTNESS = 112;
     private static final int SKYLINE_OFFSET = 200;
-    private static final int SKYLINE_START = 300;
+    private static final int SKYLINE_START = 100;
     private static final float MAX_SKYLINE_PARALLAX = 0.5f;
 
     private ComponentMapper<PhysicsComponent> physM;
@@ -52,6 +54,8 @@ public class BackgroundRenderSystem extends BaseSystem {
         // Sky Color
         c.drawColor(COLOR_SKY); // Maybe fade this to black as we get very high?
 
+        final float cameraYPx = (float) (Camera.y * Assets.metersToPx);
+
         // Skyline
         for(int i = 0; i < mSkylines.size(); i++) {
             Skyline skyline = mSkylines.get(i);
@@ -61,12 +65,21 @@ public class BackgroundRenderSystem extends BaseSystem {
 
             int x = 0;
             for(SkylinePart part : skyline) {
-                final float top = (float) (heightOffset + part.height
-                        - Camera.y * Assets.metersToPx * parallax);
-                c.drawRect(x, top, x+part.width, 0, sPaint);
+                sTempPath.reset();
+                sTempPath.moveTo(x, 0);
+                sTempPath.lineTo(x, part.height1 + heightOffset - cameraYPx * parallax);
+                sTempPath.lineTo(x + part.width, part.height2 + heightOffset - cameraYPx *
+                        parallax);
+                sTempPath.lineTo(x + part.width, 0);
+                c.drawPath(sTempPath, sPaint);
+
+
+                final float antY = heightOffset + Math.min(part.height1, part.height2)
+                        - cameraYPx * parallax;
+                c.drawRect(x, antY, x+part.width, 0, sPaint);
                 if(part.antennaPos != null) {
-                    c.drawRect(x + part.antennaPos - 3, top + 200,
-                            x + part.antennaPos + 3, top - 200, sPaint);
+                    c.drawRect(x + part.antennaPos - 3, antY + 200,
+                            x + part.antennaPos + 3, antY - 200, sPaint);
                 }
                 x += part.width;
             }
@@ -140,14 +153,27 @@ public class BackgroundRenderSystem extends BaseSystem {
         private static final int MIN_WIDTH = 75 ;
         private static final int MAX_WIDTH = 300;
         private static final int MAX_HEIGHT = 1000;
+        private static final int SLOPE_MAX = 120;
 
         public final int width;
-        public final int height;
+        public final int height1;
+        public final int height2;
         public final Integer antennaPos;
 
         public SkylinePart() {
             width = ColorsGame.random.nextInt(MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
-            height = ColorsGame.random.nextInt(MAX_HEIGHT);
+            height1 = ColorsGame.random.nextInt(MAX_HEIGHT);
+
+            if (ColorsGame.random.nextInt(3) == 0) {
+                int slopeAmt = ColorsGame.random.nextInt(SLOPE_MAX);
+                if(ColorsGame.random.nextBoolean()) {
+                    slopeAmt *= -1;
+                }
+                height2 = height1 + slopeAmt;
+            } else {
+                height2 = height1;
+            }
+
             if(ColorsGame.random.nextInt(10) == 0) {
                 antennaPos = ColorsGame.random.nextInt(width);
             } else {
