@@ -61,8 +61,13 @@ public class BackgroundRenderSystem extends BaseSystem {
 
             int x = 0;
             for(SkylinePart part : skyline) {
-                c.drawRect(x, (float) (heightOffset + part.height
-                        - Camera.y * Assets.metersToPx * parallax), x+part.width, 0, sPaint);
+                final float top = (float) (heightOffset + part.height
+                        - Camera.y * Assets.metersToPx * parallax);
+                c.drawRect(x, top, x+part.width, 0, sPaint);
+                if(part.antennaPos != null) {
+                    c.drawRect(x + part.antennaPos - 3, top + 200,
+                            x + part.antennaPos + 3, top - 200, sPaint);
+                }
                 x += part.width;
             }
         }
@@ -138,10 +143,16 @@ public class BackgroundRenderSystem extends BaseSystem {
 
         public final int width;
         public final int height;
+        public final Integer antennaPos;
 
         public SkylinePart() {
             width = ColorsGame.random.nextInt(MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH;
             height = ColorsGame.random.nextInt(MAX_HEIGHT);
+            if(ColorsGame.random.nextInt(10) == 0) {
+                antennaPos = ColorsGame.random.nextInt(width);
+            } else {
+                antennaPos = null;
+            }
         }
     }
 
