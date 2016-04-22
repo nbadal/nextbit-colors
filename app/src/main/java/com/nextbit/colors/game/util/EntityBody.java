@@ -7,11 +7,13 @@ public class EntityBody extends Body {
 
     public EntityBody(int entityId) {
         this.entityId = entityId;
+        setAutoSleepingEnabled(false);
     }
 
     public EntityBody(int entityId, int fixtureCount) {
         super(fixtureCount);
         this.entityId = entityId;
+        setAutoSleepingEnabled(false);
     }
 
     @Override
