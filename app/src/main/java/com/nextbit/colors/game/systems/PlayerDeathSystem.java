@@ -8,10 +8,12 @@ import com.nextbit.colors.game.components.ColorComponent;
 import com.nextbit.colors.game.components.PhysicsComponent;
 import com.nextbit.colors.game.components.PlayerComponent;
 import com.nextbit.colors.game.components.RenderComponent;
+import com.nextbit.colors.game.util.GravityMath;
 
 public class PlayerDeathSystem extends IteratingSystem {
 
     private ComponentMapper<PlayerComponent> playerM;
+    private ComponentMapper<PhysicsComponent> physM;
     private ComponentMapper<ColorComponent> colorM;
 
     public PlayerDeathSystem() {
@@ -25,6 +27,9 @@ public class PlayerDeathSystem extends IteratingSystem {
             return;
         }
         pc.deathHandled = true;
+
+        // Little death hop
+        physM.get(entityId).body.setLinearVelocity(0, GravityMath.JUMP_VELOCITY);
 
         // Lose the magic color
         colorM.get(entityId).color = null;

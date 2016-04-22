@@ -17,6 +17,7 @@ import com.nextbit.colors.game.systems.PlayerFloorSystem;
 import com.nextbit.colors.game.systems.PlayerRespawnSystem;
 import com.nextbit.colors.game.systems.PlayerScoreSystem;
 import com.nextbit.colors.game.systems.PlayerTapSystem;
+import com.nextbit.colors.game.util.GravityMath;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -56,7 +57,7 @@ public class ColorsGame {
         int player = Entities.createPlayer(world);
         Entities.createCamera(world, player);
         Entities.createScore(world);
-        Entities.createSwitch(world, 4);
+        Entities.createSwitch(world, PlayerFloorSystem.FLOOR_POS + GravityMath.JUMP_HEIGHT * 2);
     }
 
     public void setSize(int widthPx, int heightPx) {
